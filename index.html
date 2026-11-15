@@ -11,6 +11,7 @@
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;background:#fff;color:var(--ink);font-family:'IBM Plex Sans Arabic','Space Grotesk',sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+html[lang="en"] body{font-family:'Space Grotesk','IBM Plex Sans Arabic',sans-serif}
 a{color:var(--red);text-decoration:none}
 button,input{font-family:inherit}
 ::selection{background:var(--red-soft);color:var(--red-d)}
@@ -19,12 +20,27 @@ button,input{font-family:inherit}
 .auth-only{display:none!important}
 body.logged .auth-only{display:inline-flex!important}
 body.logged .guest-only{display:none!important}
+body.locked{overflow:hidden}
+
+/* اختيار اللغة */
+.lang-screen{position:fixed;inset:0;z-index:120;background:#fff;display:flex;align-items:center;justify-content:center;padding:24px;transition:opacity .5s,visibility .5s}
+.lang-screen.hide{opacity:0;visibility:hidden}
+.lang-box{width:100%;max-width:440px;display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center;animation:up .8s ease both}
+.lang-box .mark{width:76px;height:76px;font-size:40px;border-radius:22px;margin-bottom:6px;animation:pop .8s cubic-bezier(.2,.9,.3,1.25) both}
+.lang-box h1{font-size:30px;line-height:1.4}
+.lang-box p{margin:0;color:var(--muted);font-family:'Space Grotesk',sans-serif;font-size:18px}
+.lang-btns{display:flex;flex-direction:column;gap:12px;width:100%;margin-top:10px}
+.lang-btn{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;padding:20px 22px;border-radius:20px;border:1.5px solid var(--line);background:#fff;cursor:pointer;font-size:19px;font-weight:700;color:var(--ink);transition:transform .25s,border-color .25s,box-shadow .25s,background .25s}
+.lang-btn:hover{transform:translateY(-3px);border-color:var(--red-2);box-shadow:0 18px 34px -20px rgba(217,45,45,.6);background:var(--red-bg)}
+.lang-btn small{font-size:14px;color:var(--muted);font-weight:500}
+.lang-btn .code{width:44px;height:44px;border-radius:14px;background:var(--red-soft);color:var(--red);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:15px}
 
 /* شريط التقدم */
-.progress{position:fixed;top:0;right:0;height:3px;width:0;background:linear-gradient(270deg,var(--red),var(--red-2));z-index:90}
+.progress{position:fixed;top:0;inset-inline-start:0;height:3px;width:0;background:linear-gradient(90deg,var(--red-2),var(--red));z-index:90}
 
 /* الافتتاحية */
-.intro{position:fixed;inset:0;z-index:100;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;animation:introOut 3.6s ease forwards;pointer-events:none}
+.intro{position:fixed;inset:0;z-index:100;background:#fff;display:none;flex-direction:column;align-items:center;justify-content:center;gap:22px;pointer-events:none}
+.started .intro{display:flex;animation:introOut 3.6s ease forwards}
 .intro-mark{width:96px;height:96px;border-radius:28px;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:54px;animation:pop .9s cubic-bezier(.2,.9,.3,1.25) .2s both,glow 1.6s ease 1.1s 1}
 .intro-word{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(30px,6vw,56px);white-space:nowrap;animation:word 1.1s ease .7s both}
 .intro-bar{height:4px;border-radius:4px;background:linear-gradient(90deg,var(--red-2),var(--red));animation:bar 1.1s ease 1.4s both}
@@ -37,35 +53,36 @@ body.logged .guest-only{display:none!important}
 @keyframes fade{from{opacity:0}to{opacity:1}}
 
 /* التنقل */
-.nav{position:sticky;top:0;z-index:40;padding:14px 0;transition:padding .3s}
-.nav-in{display:flex;align-items:center;justify-content:space-between;gap:14px;height:68px;padding:0 10px 0 14px;background:rgba(255,255,255,.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--line);border-radius:20px;box-shadow:0 10px 30px -20px rgba(120,20,20,.25)}
-.brand{display:flex;align-items:center;gap:10px;color:var(--ink);padding-inline-start:4px}
-.mark{width:40px;height:40px;border-radius:12px;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:21px;box-shadow:0 8px 18px -8px rgba(217,45,45,.7)}
+.nav{position:sticky;top:0;z-index:40;padding:14px 0}
+.nav-in{display:flex;align-items:center;justify-content:space-between;gap:12px;height:68px;padding:0 10px 0 14px;background:rgba(255,255,255,.84);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--line);border-radius:20px;box-shadow:0 10px 30px -20px rgba(120,20,20,.25)}
+html[dir="ltr"] .nav-in{padding:0 14px 0 10px}
+.brand{display:flex;align-items:center;gap:10px;color:var(--ink)}
+.mark{width:40px;height:40px;border-radius:12px;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:21px;box-shadow:0 8px 18px -8px rgba(217,45,45,.7);flex-shrink:0}
 .brand-name{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;letter-spacing:.07em}
 .links{display:flex;align-items:center;gap:2px}
-.links a{position:relative;color:var(--muted);padding:12px 14px;border-radius:12px;font-size:15px;font-weight:600;transition:color .2s,background .2s}
+.links a{color:var(--muted);padding:12px 12px;border-radius:12px;font-size:15px;font-weight:600;transition:color .2s,background .2s}
 .links a:hover{color:var(--red);background:var(--red-bg)}
 .nav-actions{display:flex;align-items:center;gap:8px}
-.menu-btn{display:none;width:46px;height:46px;border-radius:14px;border:1px solid var(--line);background:#fff;cursor:pointer;align-items:center;justify-content:center;color:var(--ink)}
+.icon-btn{width:46px;height:46px;border-radius:14px;border:1px solid var(--line);background:#fff;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;color:var(--ink);font-weight:700;font-size:14px;transition:border-color .2s,color .2s}
+.icon-btn:hover{border-color:var(--red-2);color:var(--red)}
+.menu-btn{display:none}
 .mobile-menu{display:none;flex-direction:column;gap:4px;margin-top:10px;padding:12px;background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow)}
 .mobile-menu.open{display:flex}
-.mobile-menu>a:not(.btn),.mobile-menu>button:not(.btn){display:block;text-align:right;padding:14px 16px;border-radius:12px;font-size:17px;font-weight:600;color:var(--ink);background:none;border:0;cursor:pointer}
+.mobile-menu>a:not(.btn),.mobile-menu>button:not(.btn){display:block;text-align:start;padding:14px 16px;border-radius:12px;font-size:17px;font-weight:600;color:var(--ink);background:none;border:0;cursor:pointer}
 .mobile-menu>a:not(.btn):hover,.mobile-menu>button:not(.btn):hover{background:var(--red-bg);color:var(--red)}
 .mobile-menu .btn{width:100%;margin-top:6px}
 
-/* شارة المستخدم */
-.user-chip{align-items:center;gap:8px;padding:5px 6px 5px 12px;border:1px solid var(--line);border-radius:999px;background:#fff;max-width:220px}
+.user-chip{align-items:center;gap:8px;padding:5px 6px;padding-inline-start:12px;border:1px solid var(--line);border-radius:999px;background:#fff;max-width:220px}
 .avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--red-2),var(--red));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex-shrink:0;text-transform:uppercase}
 .user-name{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;direction:ltr}
-.logout{width:30px;height:30px;border-radius:50%;border:0;background:var(--red-bg);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s,color .2s}
+.logout{width:30px;height:30px;border-radius:50%;border:0;background:var(--red-bg);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .logout:hover{background:var(--red-soft);color:var(--red)}
 
 /* الأزرار */
 .btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:15px 26px;border-radius:16px;font-weight:700;font-size:16px;cursor:pointer;border:1.5px solid transparent;transition:transform .25s,box-shadow .25s,background .25s,color .25s,border-color .25s;white-space:nowrap;line-height:1.2}
 .btn:hover{transform:translateY(-3px)}
 .btn:active{transform:translateY(0) scale(.98)}
-.btn .arrow{transition:transform .25s}
-.btn:hover .arrow{transform:translateX(-4px)}
+.btn:disabled{opacity:.6;cursor:wait;transform:none}
 .btn-red{background:var(--red);color:#fff;box-shadow:0 12px 26px -12px rgba(217,45,45,.75)}
 .btn-red:hover{background:var(--red-d);color:#fff;box-shadow:0 20px 36px -14px rgba(217,45,45,.8)}
 .btn-red::after{content:"";position:absolute;top:0;bottom:0;width:55%;left:-80%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-20deg);animation:shine 4s ease-in-out 4s infinite}
@@ -77,6 +94,8 @@ body.logged .guest-only{display:none!important}
 .btn-dark{background:var(--ink);color:#fff}
 .btn-dark:hover{background:#000;color:#fff;box-shadow:0 18px 34px -16px rgba(0,0,0,.6)}
 .btn-sm{padding:11px 16px;font-size:14px;border-radius:13px}
+.flip{transition:transform .25s}
+html[dir="ltr"] .flip{transform:scaleX(-1)}
 
 /* الواجهة */
 .hero{position:relative;overflow:hidden;padding:90px 0 110px}
@@ -88,7 +107,7 @@ body.logged .guest-only{display:none!important}
 @keyframes float2{50%{transform:translate(-50px,-30px) scale(1.1)}}
 .hero-in{position:relative;display:flex;flex-wrap:wrap;align-items:center;gap:56px}
 .hero-text{flex:1 1 460px;min-width:0;display:flex;flex-direction:column;gap:24px}
-.pill{align-self:flex-start;display:inline-flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);color:var(--red-d);padding:8px 16px 8px 8px;border-radius:999px;font-size:14px;font-weight:600;box-shadow:0 8px 20px -14px rgba(120,20,20,.4)}
+.pill{align-self:flex-start;display:inline-flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);color:var(--red-d);padding:8px 8px;padding-inline-end:16px;border-radius:999px;font-size:14px;font-weight:600;box-shadow:0 8px 20px -14px rgba(120,20,20,.4)}
 .pill b{background:var(--red);color:#fff;padding:4px 10px;border-radius:999px;font-size:12px}
 h1{margin:0;font-size:clamp(42px,6.6vw,78px);line-height:1.12;font-weight:700;letter-spacing:-.01em}
 .grad{background:linear-gradient(90deg,var(--red),var(--red-2),var(--red));background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:gradMove 6s linear infinite}
@@ -104,35 +123,55 @@ h1{margin:0;font-size:clamp(42px,6.6vw,78px);line-height:1.12;font-weight:700;le
 .ring.r2 i{background:var(--red);width:12px;height:12px;top:-6px}
 .core{position:absolute;inset:37%;border-radius:30px;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(40px,8vw,66px);box-shadow:0 30px 60px -20px rgba(217,45,45,.6);animation:bob 4s ease-in-out infinite}
 .tag{position:absolute;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 14px;font-size:13px;font-weight:700;box-shadow:var(--shadow);display:flex;align-items:center;gap:8px;white-space:nowrap}
-.tag span{width:8px;height:8px;border-radius:50%;background:var(--red)}
+.tag i{width:8px;height:8px;border-radius:50%;background:var(--red)}
 .tag.t1{top:8%;right:-4%;animation:bob 5s ease-in-out infinite}
 .tag.t2{bottom:12%;left:-6%;animation:bob 6s ease-in-out .8s infinite}
 .tag.t3{bottom:-2%;right:18%;animation:bob 5.5s ease-in-out 1.4s infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes bob{50%{transform:translateY(-10px)}}
 
-/* شريط متحرك */
-.marquee{border-block:1px solid var(--line);background:var(--red-bg);overflow:hidden;padding:18px 0}
+.marquee{border-block:1px solid var(--line);background:var(--red-bg);overflow:hidden;padding:18px 0;direction:ltr}
 .marquee-track{display:flex;gap:44px;width:max-content;animation:scroll 26s linear infinite}
 .marquee span{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px;color:#C9A3A3;white-space:nowrap;display:flex;align-items:center;gap:44px}
 .marquee span::after{content:"✦";color:var(--red-2);font-size:14px}
-@keyframes scroll{to{transform:translateX(50%)}}
+@keyframes scroll{to{transform:translateX(-50%)}}
 
 /* الأقسام */
 section.block{padding:110px 0}
-.head{display:flex;flex-direction:column;gap:12px;margin-bottom:48px;max-width:640px}
+section.tint{background:var(--red-bg);border-block:1px solid var(--line)}
+.head{display:flex;flex-direction:column;gap:12px;margin-bottom:44px;max-width:640px}
+.head-row{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:28px}
+.head-row .head{margin-bottom:0}
 .eyebrow{display:inline-flex;align-items:center;gap:10px;color:var(--red);font-weight:700;font-size:14px;letter-spacing:.04em}
 .eyebrow::before{content:"";width:28px;height:2px;background:var(--red);border-radius:2px}
 h2{margin:0;font-size:clamp(32px,4.4vw,50px);line-height:1.22;font-weight:700}
 .sub{margin:0;color:var(--muted);font-size:18px;line-height:1.8}
 
-.empty{position:relative;overflow:hidden;background:linear-gradient(180deg,#fff,var(--red-bg));border:1px solid var(--line);border-radius:32px;padding:clamp(52px,8vw,96px) 24px;display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center;box-shadow:var(--shadow)}
+.empty{position:relative;overflow:hidden;background:linear-gradient(180deg,#fff,var(--red-bg));border:1px solid var(--line);border-radius:32px;padding:clamp(48px,8vw,90px) 24px;display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center;box-shadow:var(--shadow)}
 .empty-icon{width:88px;height:88px;border-radius:26px;background:#fff;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--red);animation:bob 3.5s ease-in-out infinite;box-shadow:0 18px 30px -18px rgba(217,45,45,.5)}
-.empty h3{margin:0;font-size:clamp(32px,5vw,46px);font-weight:700}
+.empty h3{margin:0;font-size:clamp(30px,5vw,44px);font-weight:700}
 .empty p{margin:0;color:var(--muted);font-size:17px;line-height:1.8;max-width:440px}
 .badge{display:inline-flex;align-items:center;gap:8px;background:#FFF1E2;color:#8F4400;padding:8px 16px;border-radius:999px;font-size:15px;font-weight:700}
 .stripes{position:absolute;inset:auto 0 0 0;height:6px;background:repeating-linear-gradient(45deg,var(--red-2) 0 14px,transparent 14px 28px);opacity:.45;animation:slide 1.2s linear infinite;background-size:40px 40px}
 @keyframes slide{to{background-position:40px 0}}
+
+/* معرض الأعمال */
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
+.chip{padding:10px 18px;border-radius:999px;border:1.5px solid var(--line);background:#fff;color:var(--muted);font-weight:700;font-size:14px;cursor:pointer;transition:all .2s}
+.chip:hover{border-color:var(--red-2);color:var(--red)}
+.chip.on{background:var(--red);border-color:var(--red);color:#fff}
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px}
+.work{background:#fff;border:1px solid var(--line);border-radius:22px;overflow:hidden;display:flex;flex-direction:column;transition:transform .35s,box-shadow .35s;animation:up .6s ease both}
+.work:hover{transform:translateY(-6px);box-shadow:0 26px 50px -28px rgba(217,45,45,.45)}
+.work-media{aspect-ratio:16/10;background:var(--red-bg);display:block;width:100%;object-fit:cover}
+.work-body{padding:16px 18px;display:flex;flex-direction:column;gap:8px}
+.work-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.spec{display:inline-flex;align-items:center;background:var(--red-soft);color:var(--red-d);padding:5px 12px;border-radius:999px;font-size:13px;font-weight:700}
+.work-title{margin:0;font-size:17px;font-weight:700;word-break:break-word}
+.work-user{font-family:'Space Grotesk',sans-serif;font-size:14px;color:var(--muted);direction:ltr;text-align:start}
+.del{border:0;background:none;color:var(--muted);cursor:pointer;font-size:13px;font-weight:600;padding:8px;border-radius:10px}
+.del:hover{background:var(--red-bg);color:var(--red)}
+.gallery-empty{grid-column:1/-1}
 
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:22px}
 .card{position:relative;overflow:hidden;background:#fff;border:1px solid var(--line);border-radius:26px;padding:34px 30px;display:flex;flex-direction:column;gap:14px;transition:transform .4s,box-shadow .4s,border-color .4s}
@@ -163,32 +202,48 @@ footer{border-top:1px solid var(--line);padding:34px 0;margin-top:20px}
 .foot .brand-name{font-size:15px;color:var(--ink)}
 
 /* النوافذ */
-.modal{position:fixed;inset:0;z-index:70;background:rgba(29,18,20,.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
+.modal{position:fixed;inset:0;z-index:70;background:rgba(29,18,20,.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;overflow-y:auto}
 .modal.open{opacity:1;visibility:visible}
-.modal-box{position:relative;background:#fff;border-radius:30px;padding:44px 28px 28px;max-width:440px;width:100%;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;box-shadow:0 40px 90px -30px rgba(0,0,0,.45);transform:translateY(30px) scale(.94);transition:transform .45s cubic-bezier(.2,.9,.3,1.2)}
+.modal-box{position:relative;background:#fff;border-radius:30px;padding:44px 26px 26px;max-width:450px;width:100%;margin:auto;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;box-shadow:0 40px 90px -30px rgba(0,0,0,.45);transform:translateY(30px) scale(.94);transition:transform .45s cubic-bezier(.2,.9,.3,1.2)}
 .modal.open .modal-box{transform:none}
-.x{position:absolute;top:14px;left:14px;width:40px;height:40px;border-radius:50%;border:0;background:var(--red-bg);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,color .2s}
+.x{position:absolute;top:14px;inset-inline-end:14px;width:40px;height:40px;border-radius:50%;border:0;background:var(--red-bg);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center}
 .x:hover{background:var(--red-soft);color:var(--red)}
 .modal-icon{width:80px;height:80px;border-radius:24px;background:var(--red-soft);color:var(--red);display:flex;align-items:center;justify-content:center;margin-bottom:4px}
 .modal-box h2{font-size:27px}
 .modal-box p{margin:0;font-size:16px;line-height:1.8;color:var(--muted)}
 .modal-btns{display:flex;flex-direction:column;gap:10px;width:100%;margin-top:6px}
 .modal-btns .btn{width:100%}
-.field{width:100%;display:flex;flex-direction:column;gap:8px;text-align:right;margin-top:6px}
-.field label{font-weight:700;font-size:15px}
+.step{display:none;width:100%;flex-direction:column;align-items:center;gap:14px}
+.step.on{display:flex}
+.field{width:100%;display:flex;flex-direction:column;gap:8px;text-align:start;margin-top:4px}
+.field label,.q{font-weight:700;font-size:15px}
 .input-wrap{display:flex;align-items:center;direction:ltr;border:1.5px solid var(--line);border-radius:16px;background:var(--red-bg);transition:border-color .2s,box-shadow .2s,background .2s}
 .input-wrap:focus-within{border-color:var(--red-2);background:#fff;box-shadow:0 0 0 4px rgba(242,107,107,.18)}
 .input-wrap span{padding:0 4px 0 16px;color:var(--muted);font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:17px}
 .input-wrap input{flex:1;min-width:0;border:0;background:transparent;padding:16px 16px 16px 2px;font-size:17px;color:var(--ink);outline:none;font-family:'Space Grotesk','IBM Plex Sans Arabic',sans-serif}
+.text-input{width:100%;border:1.5px solid var(--line);border-radius:16px;background:var(--red-bg);padding:15px 16px;font-size:16px;color:var(--ink);outline:none;transition:border-color .2s,box-shadow .2s,background .2s}
+.text-input:focus{border-color:var(--red-2);background:#fff;box-shadow:0 0 0 4px rgba(242,107,107,.18)}
 .hint{font-size:13px;color:var(--muted)}
-.err{font-size:14px;color:var(--red-d);font-weight:600;min-height:20px}
-.or{display:flex;align-items:center;gap:12px;width:100%;color:#B9A2A4;font-size:13px;margin:4px 0}
+.err{font-size:14px;color:var(--red-d);font-weight:600;min-height:20px;text-align:center}
+.or{display:flex;align-items:center;gap:12px;width:100%;color:#B9A2A4;font-size:13px;margin:2px 0}
 .or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+.confirm-name{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;color:var(--red);background:var(--red-bg);border:1px dashed #F2BCBC;border-radius:16px;padding:14px 20px;direction:ltr;word-break:break-all}
 .shake{animation:shake .4s}
 @keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
 
+.drop{position:relative;width:100%;border:2px dashed #F0BDBD;border-radius:20px;background:var(--red-bg);padding:26px 16px;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;transition:border-color .2s,background .2s}
+.drop:hover{border-color:var(--red-2);background:#fff}
+.drop input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.drop b{font-size:16px}
+.preview{width:100%;max-height:220px;object-fit:contain;border-radius:16px;background:#000;display:none}
+.preview.on{display:block}
+.file-name{display:none;width:100%;padding:12px 16px;border-radius:14px;background:var(--red-bg);border:1px solid var(--line);font-weight:700;font-size:14px;direction:ltr;word-break:break-all}
+.file-name.on{display:block}
+.specs{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;width:100%}
+.specs .chip{flex:1 1 auto}
+
 /* إشعار */
-.toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,40px);z-index:80;background:var(--ink);color:#fff;padding:14px 22px;border-radius:16px;font-weight:600;font-size:15px;display:flex;align-items:center;gap:10px;opacity:0;visibility:hidden;transition:all .4s cubic-bezier(.2,.9,.3,1.2);box-shadow:0 20px 40px -20px rgba(0,0,0,.6);max-width:calc(100% - 40px)}
+.toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,40px);z-index:130;background:var(--ink);color:#fff;padding:14px 22px;border-radius:16px;font-weight:600;font-size:15px;display:flex;align-items:center;gap:10px;opacity:0;visibility:hidden;transition:all .4s cubic-bezier(.2,.9,.3,1.2);box-shadow:0 20px 40px -20px rgba(0,0,0,.6);max-width:calc(100% - 40px)}
 .toast.show{opacity:1;visibility:visible;transform:translate(-50%,0)}
 .toast i{width:22px;height:22px;border-radius:50%;background:#3CCB7F;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 
@@ -196,17 +251,31 @@ footer{border-top:1px solid var(--line);padding:34px 0;margin-top:20px}
 .reveal{opacity:0;transform:translateY(40px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.8,.2,1)}
 .reveal.show{opacity:1;transform:none}
 .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
-.hero .up{animation:up .9s ease both}
-.hero .up:nth-child(1){animation-delay:3.1s}.hero .up:nth-child(2){animation-delay:3.25s}.hero .up:nth-child(3){animation-delay:3.4s}.hero .up:nth-child(4){animation-delay:3.55s}
-.hero-art.up{animation:up 1s ease 3.3s both}
+.hero .up{opacity:0}
+.started .hero .up{animation:up .9s ease both}
+.started .hero .up:nth-child(1){animation-delay:3.1s}.started .hero .up:nth-child(2){animation-delay:3.25s}.started .hero .up:nth-child(3){animation-delay:3.4s}.started .hero .up:nth-child(4){animation-delay:3.55s}
+.started .hero-art.up{animation:up 1s ease 3.3s both}
 @keyframes up{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
 
-@media (max-width:980px){.links,.nav-actions .hide-sm{display:none!important}.menu-btn{display:inline-flex}}
-@media (max-width:520px){.tag{display:none}.user-chip .user-name{max-width:90px}}
-@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.intro{display:none}.reveal{opacity:1;transform:none}}
+@media (max-width:1060px){.links,.nav-actions .hide-sm{display:none!important}.menu-btn{display:inline-flex}}
+@media (max-width:560px){.tag{display:none}.user-chip .user-name{max-width:80px}.brand-name{font-size:15px}.nav-login span{display:none}.nav-login{padding:11px 12px}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.intro{display:none!important}.reveal,.hero .up{opacity:1;transform:none}}
 </style>
 </head>
-<body>
+<body class="locked">
+
+<!-- اختيار اللغة -->
+<div class="lang-screen" id="langScreen" role="dialog" aria-modal="true" aria-labelledby="langTitle">
+<div class="lang-box">
+<span class="mark" aria-hidden="true">Z</span>
+<h1 id="langTitle">اختر لغتك</h1>
+<p>Choose your language</p>
+<div class="lang-btns">
+<button type="button" class="lang-btn" onclick="chooseLang('ar')"><span>العربية<br><small>Arabic</small></span><span class="code">ع</span></button>
+<button type="button" class="lang-btn" onclick="chooseLang('en')" dir="ltr"><span style="text-align:left">English<br><small>الإنجليزية</small></span><span class="code">EN</span></button>
+</div>
+</div>
+</div>
 
 <div class="progress" id="progress" aria-hidden="true"></div>
 
@@ -214,7 +283,7 @@ footer{border-top:1px solid var(--line);padding:34px 0;margin-top:20px}
 <div class="intro-mark">Z</div>
 <div class="intro-word" dir="ltr">ZIAN STUDIOS</div>
 <div class="intro-bar"></div>
-<div class="intro-tag">مرحباً فيك في عالمنا</div>
+<div class="intro-tag" data-i18n="introTag">مرحباً فيك في عالمنا</div>
 </div>
 
 <header class="nav">
@@ -224,39 +293,43 @@ footer{border-top:1px solid var(--line);padding:34px 0;margin-top:20px}
 <span class="mark" aria-hidden="true">Z</span>
 <span class="brand-name" dir="ltr">ZIAN STUDIOS</span>
 </a>
-<nav class="links" aria-label="القائمة الرئيسية">
-<a href="#top">الرئيسية</a>
-<a href="#maps">ماباتنا</a>
-<a href="#work">وش نسوي</a>
-<a href="#join">تواصل معنا</a>
+<nav class="links" aria-label="Main">
+<a href="#top" data-i18n="navHome">الرئيسية</a>
+<a href="#maps" data-i18n="navMaps">ماباتنا</a>
+<a href="#community" data-i18n="navCommunity">أعمال المجتمع</a>
+<a href="#work" data-i18n="navWork">وش نسوي</a>
+<a href="#join" data-i18n="navContact">تواصل معنا</a>
 </nav>
 <div class="nav-actions">
-<button type="button" class="btn btn-line btn-sm hide-sm" onclick="openModal('devModal')">تبي مطورين؟</button>
-<button type="button" class="btn btn-soft btn-sm hide-sm auth-only" onclick="openModal('promoModal')">ترويج لأعمالك</button>
-<button type="button" class="btn btn-dark btn-sm guest-only" onclick="openModal('loginModal')">
+<button type="button" class="btn btn-line btn-sm hide-sm" onclick="openModal('devModal')" data-i18n="needDevs">تبي مطورين؟</button>
+<button type="button" class="btn btn-soft btn-sm hide-sm auth-only" onclick="openUpload()" data-i18n="showWork">ورينا أعمالك</button>
+<button type="button" class="btn btn-dark btn-sm guest-only nav-login" onclick="openModal('loginModal')">
 <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 5 12 10 7"></polyline><line x1="5" y1="12" x2="17" y2="12"></line></svg>
-سجّل بديسكورد
+<span data-i18n="login">سجّل بديسكورد</span>
 </button>
 <div class="user-chip auth-only">
 <span class="avatar" id="avatar" aria-hidden="true">?</span>
 <span class="user-name" id="userName"></span>
-<button type="button" class="logout" aria-label="تسجيل خروج" onclick="logout()">
-<svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+<button type="button" class="logout" data-i18n-aria="logout" aria-label="تسجيل خروج" onclick="logout()">
+<svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
 </button>
 </div>
-<button type="button" class="menu-btn" aria-label="فتح القائمة" aria-expanded="false" onclick="toggleMenu(this)">
+<button type="button" class="icon-btn latin" id="langToggle" onclick="toggleLang()" data-i18n-aria="switchLang" aria-label="English">EN</button>
+<button type="button" class="icon-btn menu-btn" data-i18n-aria="openMenu" aria-label="فتح القائمة" aria-expanded="false" onclick="toggleMenu(this)">
 <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"></line><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="17" x2="20" y2="17"></line></svg>
 </button>
 </div>
 </div>
 <div class="mobile-menu" id="mobileMenu">
-<a href="#top" onclick="closeMenu()">الرئيسية</a>
-<a href="#maps" onclick="closeMenu()">ماباتنا</a>
-<a href="#work" onclick="closeMenu()">وش نسوي</a>
-<a href="#join" onclick="closeMenu()">تواصل معنا</a>
-<button type="button" onclick="closeMenu();openModal('devModal')">تبي مطورين؟</button>
-<button type="button" class="btn btn-soft auth-only" onclick="closeMenu();openModal('promoModal')">ترويج لأعمالك</button>
-<a href="https://www.roblox.com/share/g/352262036" target="_blank" rel="noopener" class="btn btn-red">انضم للقروب</a>
+<a href="#top" onclick="closeMenu()" data-i18n="navHome">الرئيسية</a>
+<a href="#maps" onclick="closeMenu()" data-i18n="navMaps">ماباتنا</a>
+<a href="#community" onclick="closeMenu()" data-i18n="navCommunity">أعمال المجتمع</a>
+<a href="#work" onclick="closeMenu()" data-i18n="navWork">وش نسوي</a>
+<a href="#join" onclick="closeMenu()" data-i18n="navContact">تواصل معنا</a>
+<button type="button" onclick="closeMenu();openModal('devModal')" data-i18n="needDevs">تبي مطورين؟</button>
+<button type="button" class="btn btn-soft" onclick="closeMenu();openUpload()" data-i18n="showWork">ورينا أعمالك</button>
+<button type="button" class="btn btn-line auth-only" onclick="closeMenu();openModal('promoModal')" data-i18n="promo">ترويج لأعمالك</button>
+<a href="https://www.roblox.com/share/g/352262036" target="_blank" rel="noopener" class="btn btn-red" data-i18n="joinGroup">انضم للقروب</a>
 </div>
 </div>
 </header>
@@ -268,21 +341,25 @@ footer{border-top:1px solid var(--line);padding:34px 0;margin-top:20px}
 <span class="blob b2" aria-hidden="true"></span>
 <div class="wrap hero-in">
 <div class="hero-text">
-<span class="pill up"><b>جديد</b>مجتمع مطوّرين على روبلوكس</span>
-<h1 class="up">نبني عوالم روبلوكس <span class="grad">تستاهل تنلعب</span></h1>
-<p class="lead up">Zian Studios مجتمعنا اللي ننشر فيه ماباتنا. نصمم الواجهات، نكتب السكربتات، ونبني كل ماب من الصفر في Roblox Studio.</p>
+<span class="pill up"><b data-i18n="new">جديد</b><span data-i18n="pill">مجتمع مطوّرين على روبلوكس</span></span>
+<h1 class="up"><span data-i18n="h1a">نبني عوالم روبلوكس</span> <span class="grad" data-i18n="h1b">تستاهل تنلعب</span></h1>
+<p class="lead up" data-i18n="lead">Zian Studios مجتمعنا اللي ننشر فيه ماباتنا. نصمم الواجهات، نكتب السكربتات، ونبني كل ماب من الصفر في Roblox Studio.</p>
 <div class="cta up">
-<a href="https://www.roblox.com/share/g/352262036" target="_blank" rel="noopener" class="btn btn-red">انضم للقروب
-<svg class="arrow" aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+<a href="https://www.roblox.com/share/g/352262036" target="_blank" rel="noopener" class="btn btn-red"><span data-i18n="joinGroup">انضم للقروب</span>
+<svg class="flip" aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
 </a>
 <a href="https://discord.gg/pTAV7vbmj" target="_blank" rel="noopener" class="btn btn-line">
 <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-ادخل الديسكورد
+<span data-i18n="discord">ادخل الديسكورد</span>
 </a>
-<button type="button" class="btn btn-soft guest-only" onclick="openModal('devModal')">تبي مطورين؟</button>
-<button type="button" class="btn btn-soft auth-only" onclick="openModal('promoModal')">
+<button type="button" class="btn btn-soft" onclick="openUpload()">
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+<span data-i18n="showWork">ورينا أعمالك</span>
+</button>
+<button type="button" class="btn btn-line guest-only" onclick="openModal('devModal')" data-i18n="needDevs">تبي مطورين؟</button>
+<button type="button" class="btn btn-line auth-only" onclick="openModal('promoModal')">
 <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-5v12L3 13v-2z"></path><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"></path></svg>
-ترويج لأعمالك
+<span data-i18n="promo">ترويج لأعمالك</span>
 </button>
 </div>
 </div>
@@ -292,9 +369,9 @@ footer{border-top:1px solid var(--line);padding:34px 0;margin-top:20px}
 <div class="ring r2"><i></i></div>
 <div class="ring r3"></div>
 <div class="core">Z</div>
-<div class="tag t1"><span></span>تصميم واجهات</div>
-<div class="tag t2"><span></span>سكربتات Luau</div>
-<div class="tag t3"><span></span>بناء مابات</div>
+<div class="tag t1"><i></i><span data-i18n="tag1">تصميم واجهات</span></div>
+<div class="tag t2"><i></i><span data-i18n="tag2">سكربتات Luau</span></div>
+<div class="tag t3"><i></i><span data-i18n="tag3">بناء مابات</span></div>
 </div>
 </div>
 </div>
@@ -302,69 +379,87 @@ footer{border-top:1px solid var(--line);padding:34px 0;margin-top:20px}
 
 <div class="marquee" aria-hidden="true">
 <div class="marquee-track">
-<span>UI / GUI</span><span>SCRIPTING</span><span>BUILDING</span><span>ROBLOX STUDIO</span><span>ZIAN STUDIOS</span>
-<span>UI / GUI</span><span>SCRIPTING</span><span>BUILDING</span><span>ROBLOX STUDIO</span><span>ZIAN STUDIOS</span>
+<span>UI / GUI</span><span>SCRIPTING</span><span>ANIMATION</span><span>BUILDING</span><span>UGC</span><span>ZIAN STUDIOS</span>
+<span>UI / GUI</span><span>SCRIPTING</span><span>ANIMATION</span><span>BUILDING</span><span>UGC</span><span>ZIAN STUDIOS</span>
 </div>
 </div>
 
 <section class="block" id="maps">
 <div class="wrap">
 <div class="head reveal">
-<span class="eyebrow">ماباتنا</span>
-<h2>آخر أعمالنا</h2>
+<span class="eyebrow" data-i18n="navMaps">ماباتنا</span>
+<h2 data-i18n="mapsTitle">آخر أعمالنا</h2>
 </div>
 <div class="empty reveal d1">
 <div class="empty-icon" aria-hidden="true">
 <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
 </div>
-<h3>لا يوجد</h3>
+<h3 data-i18n="none">لا يوجد</h3>
 <span class="badge">
 <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-قيد التطوير
+<span data-i18n="inDev">قيد التطوير</span>
 </span>
-<p>نشتغل الحين على ماباتنا الجاية. تابعنا في الديسكورد عشان توصلك أول ما تنزل.</p>
+<p data-i18n="mapsText">نشتغل الحين على ماباتنا الجاية. تابعنا في الديسكورد عشان توصلك أول ما تنزل.</p>
 <span class="stripes" aria-hidden="true"></span>
 </div>
 </div>
 </section>
 
-<section class="block" id="work" style="background:var(--red-bg);border-block:1px solid var(--line)">
+<section class="block tint" id="community">
+<div class="wrap">
+<div class="head-row">
+<div class="head reveal">
+<span class="eyebrow" data-i18n="navCommunity">أعمال المجتمع</span>
+<h2 data-i18n="galTitle">ورّنا وش تسوي</h2>
+<p class="sub" data-i18n="galSub">صور ومقاطع من شغل أعضاء المجتمع.</p>
+</div>
+<button type="button" class="btn btn-red reveal d1" onclick="openUpload()">
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+<span data-i18n="showWork">ورينا أعمالك</span>
+</button>
+</div>
+<div class="filters reveal d1" id="filters" role="group"></div>
+<div class="gallery" id="gallery"></div>
+</div>
+</section>
+
+<section class="block" id="work">
 <div class="wrap">
 <div class="head reveal">
-<span class="eyebrow">وش نسوي</span>
-<h2>كل ماب نسويه من الصفر</h2>
-<p class="sub">من أول فكرة لين آخر تفصيلة، كل شي نسويه بأيدينا.</p>
+<span class="eyebrow" data-i18n="navWork">وش نسوي</span>
+<h2 data-i18n="workTitle">كل ماب نسويه من الصفر</h2>
+<p class="sub" data-i18n="workSub">من أول فكرة لين آخر تفصيلة، كل شي نسويه بأيدينا.</p>
 </div>
 <div class="cards">
 <div class="card reveal d1">
-<div class="card-top"><span class="card-icon" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M3 9h18"></path><path d="M9 21V9"></path></svg></span><span class="num latin">01</span></div>
-<h3>تصميم الواجهات</h3>
-<p>واجهات GUI فخمة وسهلة: القوائم، الحقيبة، الترقيات، وكل شاشة يشوفها اللاعب.</p>
+<div class="card-top"><span class="card-icon" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M3 9h18"></path><path d="M9 21V9"></path></svg></span><span class="num">01</span></div>
+<h3 data-i18n="c1t">تصميم الواجهات</h3>
+<p data-i18n="c1p">واجهات GUI فخمة وسهلة: القوائم، الحقيبة، الترقيات، وكل شاشة يشوفها اللاعب.</p>
 </div>
 <div class="card reveal d2">
-<div class="card-top"><span class="card-icon" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg></span><span class="num latin">02</span></div>
-<h3>البرمجة والسكربتات</h3>
-<p>أنظمة اللعب مكتوبة بـ Luau: من الأزرار والانتقالات إلى أنظمة اللعب الكاملة.</p>
+<div class="card-top"><span class="card-icon" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg></span><span class="num">02</span></div>
+<h3 data-i18n="c2t">البرمجة والسكربتات</h3>
+<p data-i18n="c2p">أنظمة اللعب مكتوبة بـ Luau: من الأزرار والانتقالات إلى أنظمة اللعب الكاملة.</p>
 </div>
 <div class="card reveal d3">
-<div class="card-top"><span class="card-icon" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg></span><span class="num latin">03</span></div>
-<h3>بناء الماب</h3>
-<p>نبني العالم نفسه في Roblox Studio: المباني، التفاصيل، والأماكن اللي يستكشفها اللاعب.</p>
+<div class="card-top"><span class="card-icon" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg></span><span class="num">03</span></div>
+<h3 data-i18n="c3t">بناء الماب</h3>
+<p data-i18n="c3p">نبني العالم نفسه في Roblox Studio: المباني، التفاصيل، والأماكن اللي يستكشفها اللاعب.</p>
 </div>
 </div>
 </div>
 </section>
 
-<section class="block" id="join">
+<section class="block" id="join" style="padding-top:0">
 <div class="wrap">
 <div class="join reveal">
 <div class="join-text">
-<h2>انضم لـ Zian Studios</h2>
-<p>انضم لقروبنا في روبلوكس عشان تلعب ماباتنا أول ما تنزل، وادخل الديسكورد وسولف معنا.</p>
+<h2 data-i18n="joinTitle">انضم لـ Zian Studios</h2>
+<p data-i18n="joinText">انضم لقروبنا في روبلوكس عشان تلعب ماباتنا أول ما تنزل، وادخل الديسكورد وسولف معنا.</p>
 </div>
 <div class="join-btns">
-<a href="https://www.roblox.com/share/g/352262036" target="_blank" rel="noopener" class="btn btn-white">انضم للقروب</a>
-<a href="https://discord.gg/pTAV7vbmj" target="_blank" rel="noopener" class="btn btn-ghost">ادخل الديسكورد</a>
+<a href="https://www.roblox.com/share/g/352262036" target="_blank" rel="noopener" class="btn btn-white" data-i18n="joinGroup">انضم للقروب</a>
+<a href="https://discord.gg/pTAV7vbmj" target="_blank" rel="noopener" class="btn btn-ghost" data-i18n="discord">ادخل الديسكورد</a>
 </div>
 </div>
 </div>
@@ -374,64 +469,102 @@ footer{border-top:1px solid var(--line);padding:34px 0;margin-top:20px}
 <footer>
 <div class="wrap foot">
 <a href="#top" class="brand"><span class="mark" aria-hidden="true" style="width:32px;height:32px;font-size:17px;border-radius:10px">Z</span><span class="brand-name" dir="ltr">ZIAN STUDIOS</span></a>
-<span>صُنع بحب في Roblox Studio</span>
+<span data-i18n="made">صُنع بحب في Roblox Studio</span>
 <span class="latin" dir="ltr">© 2026 Zian Studios</span>
 </div>
 </footer>
 
-<!-- نافذة تسجيل ديسكورد -->
+<!-- تسجيل ديسكورد -->
 <div class="modal" id="loginModal" onclick="if(event.target===this)closeModal('loginModal')">
 <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
-<button type="button" class="x" aria-label="إغلاق" onclick="closeModal('loginModal')"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+<button type="button" class="x" data-i18n-aria="close" aria-label="إغلاق" onclick="closeModal('loginModal')"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+<div class="step on" id="loginStep1">
 <div class="modal-icon" aria-hidden="true"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
-<h2 id="loginTitle">سجّل بحساب ديسكورد</h2>
-<p>حط يوزرك في ديسكورد بس، ما نطلب منك كلمة مرور أبداً.</p>
-<form class="field" id="loginForm" onsubmit="return doLogin(event)" novalidate>
-<label for="discordUser">يوزر ديسكورد</label>
-<div class="input-wrap" id="inputWrap"><span>@</span><input id="discordUser" type="text" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="32" placeholder="username"></div>
-<span class="hint">من 2 إلى 32 حرف: إنجليزي وأرقام و _ و .</span>
+<h2 id="loginTitle" data-i18n="loginTitle">سجّل بحساب ديسكورد</h2>
+<p data-i18n="loginText">حط يوزرك في ديسكورد بس، ما نطلب منك كلمة مرور أبداً.</p>
+<form class="field" onsubmit="return askConfirm(event)" novalidate>
+<label for="discordUser" data-i18n="userLabel">يوزر ديسكورد</label>
+<div class="input-wrap" id="inputWrap"><span>@</span><input id="discordUser" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="32" placeholder="username"></div>
+<span class="hint" data-i18n="userHint">من 2 إلى 32 حرف: إنجليزي وأرقام و _ و .</span>
 <span class="err" id="loginErr" role="alert"></span>
-<div class="modal-btns" style="margin-top:0">
-<button type="submit" class="btn btn-red">تسجيل</button>
-</div>
+<div class="modal-btns" style="margin-top:0"><button type="submit" class="btn btn-red" data-i18n="confirm">تأكيد</button></div>
 </form>
-<div class="or">أو</div>
+<div class="or" data-i18n="or">أو</div>
 <div class="modal-btns" style="margin-top:0">
 <a href="https://discord.gg/pTAV7vbmj" target="_blank" rel="noopener" class="btn btn-line">
 <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-انضم لسيرفر الديسكورد
+<span data-i18n="joinServer">انضم لسيرفر الديسكورد</span>
 </a>
+</div>
+</div>
+<div class="step" id="loginStep2">
+<div class="modal-icon" aria-hidden="true"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg></div>
+<h2 data-i18n="sureTitle">متأكد؟</h2>
+<p data-i18n="sureText">يوزرك بيكون كذا:</p>
+<div class="confirm-name" id="confirmName"></div>
+<div class="modal-btns">
+<button type="button" class="btn btn-red" id="confirmYes" onclick="confirmLogin()" data-i18n="sureYes">إيه، متأكد</button>
+<button type="button" class="btn btn-line" onclick="backToEdit()" data-i18n="sureNo">لا، أبي أعدّل</button>
+</div>
 </div>
 </div>
 </div>
 
-<!-- نافذة الترويج -->
+<!-- ورينا أعمالك -->
+<div class="modal" id="uploadModal" onclick="if(event.target===this)closeModal('uploadModal')">
+<div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="upTitle">
+<button type="button" class="x" data-i18n-aria="close" aria-label="إغلاق" onclick="closeModal('uploadModal')"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+<div class="modal-icon" aria-hidden="true"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg></div>
+<h2 id="upTitle" data-i18n="showWork">ورينا أعمالك</h2>
+<p data-i18n="upText">حط صورة أو مقطع من شغلك.</p>
+<label class="drop">
+<input type="file" id="workFile" accept="image/*,video/*" onchange="pickFile(this)">
+<svg aria-hidden="true" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#D92D2D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+<b data-i18n="pick">اختار صورة أو مقطع</b>
+<span class="hint" data-i18n="pickHint">صورة أو فيديو، أقصى حجم 25MB</span>
+</label>
+<img class="preview" id="prevImg" alt="" onerror="this.classList.remove('on');document.getElementById('fileName').classList.add('on')">
+<div class="file-name" id="fileName"></div>
+<video class="preview" id="prevVid" controls playsinline muted></video>
+<div class="field">
+<span class="q" id="specQ" data-i18n="specQ">وش تخصص هذا العمل؟</span>
+<div class="specs" id="specs" role="radiogroup" aria-labelledby="specQ"></div>
+</div>
+<div class="field">
+<label for="workTitle" data-i18n="titleLabel">اسم العمل (اختياري)</label>
+<input class="text-input" id="workTitle" type="text" maxlength="60" data-i18n-ph="titlePh" placeholder="مثلاً: واجهة متجر">
+</div>
+<span class="err" id="upErr" role="alert"></span>
+<div class="modal-btns" style="margin-top:0">
+<button type="button" class="btn btn-red" id="publishBtn" onclick="publishWork()" data-i18n="publish">انشر</button>
+</div>
+</div>
+</div>
+
+<!-- الترويج -->
 <div class="modal" id="promoModal" onclick="if(event.target===this)closeModal('promoModal')">
 <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="promoTitle">
-<button type="button" class="x" aria-label="إغلاق" onclick="closeModal('promoModal')"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+<button type="button" class="x" data-i18n-aria="close" aria-label="إغلاق" onclick="closeModal('promoModal')"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
 <div class="modal-icon" aria-hidden="true"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"></rect><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"></path><line x1="12" y1="12" x2="12" y2="16"></line></svg></div>
-<h2 id="promoTitle">تحت الإنشاء</h2>
-<p>خدمة ترويج الأعمال قاعدين نجهزها، وقريب بتقدر تعرض شغلك لكل المجتمع.</p>
+<h2 id="promoTitle" data-i18n="promoTitle">تحت الإنشاء</h2>
+<p data-i18n="promoText">خدمة ترويج الأعمال قاعدين نجهزها، وقريب بتقدر تعرض شغلك لكل المجتمع.</p>
 <div class="modal-btns">
-<a href="https://discord.gg/pTAV7vbmj" target="_blank" rel="noopener" class="btn btn-red">تابع الأخبار في الديسكورد</a>
-<button type="button" class="btn btn-line" onclick="closeModal('promoModal')">تمام</button>
+<a href="https://discord.gg/pTAV7vbmj" target="_blank" rel="noopener" class="btn btn-red" data-i18n="followNews">تابع الأخبار في الديسكورد</a>
+<button type="button" class="btn btn-line" onclick="closeModal('promoModal')" data-i18n="ok">تمام</button>
 </div>
 </div>
 </div>
 
-<!-- نافذة المطورين -->
+<!-- المطورين -->
 <div class="modal" id="devModal" onclick="if(event.target===this)closeModal('devModal')">
 <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="devTitle">
-<button type="button" class="x" aria-label="إغلاق" onclick="closeModal('devModal')"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+<button type="button" class="x" data-i18n-aria="close" aria-label="إغلاق" onclick="closeModal('devModal')"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
 <div class="modal-icon" aria-hidden="true"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><line x1="17" y1="8" x2="22" y2="13"></line><line x1="22" y1="8" x2="17" y2="13"></line></svg></div>
-<h2 id="devTitle">مافي مطورين حالياً</h2>
-<p>ما عندنا مطورين متاحين الحين. انضم لديسكوردنا عشان توصلك أخبار المطورين أول بأول.</p>
+<h2 id="devTitle" data-i18n="devTitle">مافي مطورين حالياً</h2>
+<p data-i18n="devText">ما عندنا مطورين متاحين الحين. انضم لديسكوردنا عشان توصلك أخبار المطورين أول بأول.</p>
 <div class="modal-btns">
-<a href="https://discord.gg/pTAV7vbmj" target="_blank" rel="noopener" class="btn btn-red">
-<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-انضم للديسكورد لأخبار المطورين
-</a>
-<button type="button" class="btn btn-line" onclick="closeModal('devModal')">إغلاق</button>
+<a href="https://discord.gg/pTAV7vbmj" target="_blank" rel="noopener" class="btn btn-red" data-i18n="devBtn">انضم للديسكورد لأخبار المطورين</a>
+<button type="button" class="btn btn-line" onclick="closeModal('devModal')" data-i18n="close">إغلاق</button>
 </div>
 </div>
 </div>
@@ -439,55 +572,234 @@ footer{border-top:1px solid var(--line);padding:34px 0;margin-top:20px}
 <div class="toast" id="toast" role="status" aria-live="polite"><i><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></i><span id="toastText"></span></div>
 
 <script>
-var KEY='zianDiscordUser';
-function openModal(id){document.getElementById(id).classList.add('open');if(id==='loginModal'){setTimeout(function(){document.getElementById('discordUser').focus()},250)}}
-function closeModal(id){document.getElementById(id).classList.remove('open')}
-document.addEventListener('keydown',function(e){if(e.key==='Escape'){document.querySelectorAll('.modal.open').forEach(function(m){m.classList.remove('open')})}});
-function toggleMenu(b){var m=document.getElementById('mobileMenu');var o=m.classList.toggle('open');b.setAttribute('aria-expanded',o)}
-function closeMenu(){document.getElementById('mobileMenu').classList.remove('open');var b=document.querySelector('.menu-btn');if(b)b.setAttribute('aria-expanded','false')}
+/* ===== الإعدادات =====
+   لو تبي توصلك اليوزرات والأعمال في روم بسيرفرك:
+   سوّ Webhook من إعدادات الروم في ديسكورد والصق رابطه بين العلامتين تحت. */
+var WEBHOOK_URL = '';
 
-function toast(t){var el=document.getElementById('toast');document.getElementById('toastText').textContent=t;el.classList.add('show');clearTimeout(window._tt);window._tt=setTimeout(function(){el.classList.remove('show')},2800)}
+var T={
+ar:{introTag:'مرحباً فيك في عالمنا',navHome:'الرئيسية',navMaps:'ماباتنا',navCommunity:'أعمال المجتمع',navWork:'وش نسوي',navContact:'تواصل معنا',needDevs:'تبي مطورين؟',showWork:'ورينا أعمالك',promo:'ترويج لأعمالك',login:'سجّل بديسكورد',logout:'تسجيل خروج',switchLang:'English',openMenu:'فتح القائمة',joinGroup:'انضم للقروب',discord:'ادخل الديسكورد',new:'جديد',pill:'مجتمع مطوّرين على روبلوكس',h1a:'نبني عوالم روبلوكس',h1b:'تستاهل تنلعب',lead:'Zian Studios مجتمعنا اللي ننشر فيه ماباتنا. نصمم الواجهات، نكتب السكربتات، ونبني كل ماب من الصفر في Roblox Studio.',tag1:'تصميم واجهات',tag2:'سكربتات Luau',tag3:'بناء مابات',mapsTitle:'آخر أعمالنا',none:'لا يوجد',inDev:'قيد التطوير',mapsText:'نشتغل الحين على ماباتنا الجاية. تابعنا في الديسكورد عشان توصلك أول ما تنزل.',galTitle:'ورّنا وش تسوي',galSub:'صور ومقاطع من شغل أعضاء المجتمع.',all:'الكل',galEmptyT:'ما فيه أعمال للحين',galEmptyP:'كن أول واحد يعرض شغله.',del:'حذف',workTitle:'كل ماب نسويه من الصفر',workSub:'من أول فكرة لين آخر تفصيلة، كل شي نسويه بأيدينا.',c1t:'تصميم الواجهات',c1p:'واجهات GUI فخمة وسهلة: القوائم، الحقيبة، الترقيات، وكل شاشة يشوفها اللاعب.',c2t:'البرمجة والسكربتات',c2p:'أنظمة اللعب مكتوبة بـ Luau: من الأزرار والانتقالات إلى أنظمة اللعب الكاملة.',c3t:'بناء الماب',c3p:'نبني العالم نفسه في Roblox Studio: المباني، التفاصيل، والأماكن اللي يستكشفها اللاعب.',joinTitle:'انضم لـ Zian Studios',joinText:'انضم لقروبنا في روبلوكس عشان تلعب ماباتنا أول ما تنزل، وادخل الديسكورد وسولف معنا.',made:'صُنع بحب في Roblox Studio',close:'إغلاق',loginTitle:'سجّل بحساب ديسكورد',loginText:'حط يوزرك في ديسكورد بس، ما نطلب منك كلمة مرور أبداً.',userLabel:'يوزر ديسكورد',userHint:'من 2 إلى 32 حرف: إنجليزي وأرقام و _ و .',confirm:'تأكيد',or:'أو',joinServer:'انضم لسيرفر الديسكورد',errUser:'اكتب يوزر صحيح (إنجليزي وأرقام و _ و . فقط).',sureTitle:'متأكد؟',sureText:'يوزرك بيكون كذا:',sureYes:'إيه، متأكد',sureNo:'لا، أبي أعدّل',upText:'حط صورة أو مقطع من شغلك.',pick:'اختار صورة أو مقطع',pickHint:'صورة أو فيديو، أقصى حجم 25MB',specQ:'وش تخصص هذا العمل؟',titleLabel:'اسم العمل (اختياري)',titlePh:'مثلاً: واجهة متجر',publish:'انشر',errFile:'اختار صورة أو مقطع أول.',errType:'لازم يكون صورة أو فيديو.',errBig:'الملف كبير، أقصى حد 25MB.',errSpec:'اختار تخصص العمل.',errSave:'ما قدرنا نحفظ العمل، جرّب ملف أصغر.',promoTitle:'تحت الإنشاء',promoText:'خدمة ترويج الأعمال قاعدين نجهزها، وقريب بتقدر تعرض شغلك لكل المجتمع.',followNews:'تابع الأخبار في الديسكورد',ok:'تمام',devTitle:'مافي مطورين حالياً',devText:'ما عندنا مطورين متاحين الحين. انضم لديسكوردنا عشان توصلك أخبار المطورين أول بأول.',devBtn:'انضم للديسكورد لأخبار المطورين',welcome:'أهلاً @{u}! صار عندك زر ترويج لأعمالك',loggedOut:'تم تسجيل الخروج',needLogin:'سجّل بيوزر ديسكورد أول',published:'انتشر شغلك!',deleted:'انحذف العمل',ui:'UI',scripter:'سكربتر',animation:'أنيميشن',builder:'بلدر',ugc:'UGC'},
+en:{introTag:'Welcome to our world',navHome:'Home',navMaps:'Our maps',navCommunity:'Community',navWork:'What we do',navContact:'Contact',needDevs:'Need developers?',showWork:'Show your work',promo:'Promote your work',login:'Sign in with Discord',logout:'Sign out',switchLang:'العربية',openMenu:'Open menu',joinGroup:'Join the group',discord:'Join Discord',new:'New',pill:'A Roblox developer community',h1a:'We build Roblox worlds',h1b:'worth playing',lead:'Zian Studios is the community where we publish our maps. We design the UI, write the scripts and build every map from scratch in Roblox Studio.',tag1:'UI design',tag2:'Luau scripts',tag3:'Map building',mapsTitle:'Our latest work',none:'Nothing yet',inDev:'In development',mapsText:'We are working on our next maps. Follow us on Discord to hear the moment they drop.',galTitle:'Show us what you make',galSub:'Images and clips from our community members.',all:'All',galEmptyT:'No work yet',galEmptyP:'Be the first to share yours.',del:'Delete',workTitle:'Every map built from scratch',workSub:'From the first idea to the last detail, we make it all ourselves.',c1t:'UI design',c1p:'Clean, premium GUIs: menus, inventory, upgrades and every screen the player sees.',c2t:'Scripting',c2p:'Gameplay systems written in Luau, from buttons and transitions to full game loops.',c3t:'Map building',c3p:'We build the world itself in Roblox Studio: buildings, details and places to explore.',joinTitle:'Join Zian Studios',joinText:'Join our Roblox group to play our maps first, and hop into Discord to hang out with us.',made:'Made with love in Roblox Studio',close:'Close',loginTitle:'Sign in with Discord',loginText:'Just enter your Discord username. We never ask for a password.',userLabel:'Discord username',userHint:'2 to 32 characters: letters, numbers, _ and .',confirm:'Confirm',or:'or',joinServer:'Join the Discord server',errUser:'Enter a valid username (letters, numbers, _ and . only).',sureTitle:'Are you sure?',sureText:'Your username will be:',sureYes:'Yes, I\'m sure',sureNo:'No, let me edit',upText:'Add an image or a clip of your work.',pick:'Choose an image or video',pickHint:'Image or video, up to 25MB',specQ:'What is this work\'s specialty?',titleLabel:'Work title (optional)',titlePh:'e.g. Shop UI',publish:'Publish',errFile:'Choose an image or video first.',errType:'It has to be an image or a video.',errBig:'File is too big, the limit is 25MB.',errSpec:'Pick a specialty.',errSave:'Could not save it, try a smaller file.',promoTitle:'Under construction',promoText:'Our work promotion service is on the way. Soon you will be able to show your work to the whole community.',followNews:'Follow the news on Discord',ok:'OK',devTitle:'No developers right now',devText:'We have no developers available at the moment. Join our Discord to get developer news first.',devBtn:'Join Discord for developer news',welcome:'Welcome @{u}! You can now promote your work',loggedOut:'Signed out',needLogin:'Sign in with your Discord username first',published:'Your work is live!',deleted:'Work deleted',ui:'UI',scripter:'Scripter',animation:'Animation',builder:'Builder',ugc:'UGC'}
+};
+var SPECS=['ui','scripter','animation','builder','ugc'];
+var lang='ar',user=null,filter='all',chosenSpec=null,chosenFile=null,pendingUpload=false,urls=[];
+
+function t(k,v){var s=(T[lang]&&T[lang][k])||T.ar[k]||k;if(v){for(var x in v){s=s.replace('{'+x+'}',v[x])}}return s}
 function save(k,v){try{localStorage.setItem(k,v)}catch(e){}}
 function load(k){try{return localStorage.getItem(k)}catch(e){return null}}
 function drop(k){try{localStorage.removeItem(k)}catch(e){}}
 
-function setUser(name){
-if(name){
-document.body.classList.add('logged');
-document.getElementById('userName').textContent='@'+name;
-document.getElementById('avatar').textContent=name.charAt(0);
-}else{
-document.body.classList.remove('logged');
+/* اللغة */
+function applyLang(){
+var h=document.documentElement;h.lang=lang;h.dir=lang==='ar'?'rtl':'ltr';
+document.querySelectorAll('[data-i18n]').forEach(function(el){el.textContent=t(el.getAttribute('data-i18n'))});
+document.querySelectorAll('[data-i18n-aria]').forEach(function(el){el.setAttribute('aria-label',t(el.getAttribute('data-i18n-aria')))});
+document.querySelectorAll('[data-i18n-ph]').forEach(function(el){el.setAttribute('placeholder',t(el.getAttribute('data-i18n-ph')))});
+document.getElementById('langToggle').textContent=lang==='ar'?'EN':'ع';
+renderFilters();renderSpecs();renderGallery();
 }
+function chooseLang(l){
+lang=l;save('zianLang',l);applyLang();
+document.getElementById('langScreen').classList.add('hide');
+document.body.classList.remove('locked');document.body.classList.add('started');
 }
-function doLogin(e){
-e.preventDefault();
-var input=document.getElementById('discordUser');
-var err=document.getElementById('loginErr');
-var v=input.value.trim().replace(/^@/,'').toLowerCase();
-if(!/^[a-z0-9_.]{2,32}$/.test(v)){
-err.textContent='اكتب يوزر صحيح (إنجليزي وأرقام و _ و . فقط).';
-var w=document.getElementById('inputWrap');w.classList.remove('shake');void w.offsetWidth;w.classList.add('shake');
-return false;
-}
-err.textContent='';
-save(KEY,v);setUser(v);closeModal('loginModal');input.value='';
-toast('أهلاً @'+v+'! صار عندك زر ترويج لأعمالك');
-return false;
-}
-function logout(){drop(KEY);setUser(null);toast('تم تسجيل الخروج')}
-setUser(load(KEY));
+function toggleLang(){lang=lang==='ar'?'en':'ar';save('zianLang',lang);applyLang()}
 
+/* النوافذ */
+function openModal(id){document.getElementById(id).classList.add('open');if(id==='loginModal'){showStep(1);setTimeout(function(){document.getElementById('discordUser').focus()},250)}}
+function closeModal(id){document.getElementById(id).classList.remove('open');if(id==='loginModal')pendingUpload=false}
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){document.querySelectorAll('.modal.open').forEach(function(m){closeModal(m.id)})}});
+function toggleMenu(b){var m=document.getElementById('mobileMenu');var o=m.classList.toggle('open');b.setAttribute('aria-expanded',o)}
+function closeMenu(){document.getElementById('mobileMenu').classList.remove('open');var b=document.querySelector('.menu-btn');if(b)b.setAttribute('aria-expanded','false')}
+function toast(s){var el=document.getElementById('toast');document.getElementById('toastText').textContent=s;el.classList.add('show');clearTimeout(window._tt);window._tt=setTimeout(function(){el.classList.remove('show')},2800)}
+function shake(id){var w=document.getElementById(id);w.classList.remove('shake');void w.offsetWidth;w.classList.add('shake')}
+
+/* ويب هوك */
+function sendHook(content,file){
+if(!WEBHOOK_URL)return;
+try{
+var fd=new FormData();
+fd.append('payload_json',JSON.stringify({content:content,allowed_mentions:{parse:[]}}));
+if(file)fd.append('files[0]',file,file.name||'work');
+fetch(WEBHOOK_URL,{method:'POST',body:fd}).catch(function(){});
+}catch(e){}
+}
+
+/* تسجيل الدخول */
+var pendingName='';
+function showStep(n){document.getElementById('loginStep1').classList.toggle('on',n===1);document.getElementById('loginStep2').classList.toggle('on',n===2)}
+function askConfirm(e){
+e.preventDefault();
+var v=document.getElementById('discordUser').value.trim().replace(/^@/,'').toLowerCase();
+var err=document.getElementById('loginErr');
+if(!/^[a-z0-9_.]{2,32}$/.test(v)){err.textContent=t('errUser');shake('inputWrap');return false}
+err.textContent='';pendingName=v;
+document.getElementById('confirmName').textContent='@'+v;
+showStep(2);
+return false;
+}
+function backToEdit(){showStep(1);document.getElementById('discordUser').focus()}
+function confirmLogin(){
+var v=pendingName;if(!v)return;
+save('zianDiscordUser',v);
+var list=[];try{list=JSON.parse(load('zianUsers')||'[]')}catch(e){}
+if(list.indexOf(v)===-1){list.push(v);save('zianUsers',JSON.stringify(list))}
+sendHook('New sign-in on the site: @'+v);
+setUser(v);
+var go=pendingUpload;pendingUpload=false;
+closeModal('loginModal');document.getElementById('discordUser').value='';
+toast(t('welcome',{u:v}));
+if(go)setTimeout(function(){openModal('uploadModal')},350);
+}
+function setUser(name){
+user=name||null;
+document.body.classList.toggle('logged',!!user);
+if(user){document.getElementById('userName').textContent='@'+user;document.getElementById('avatar').textContent=user.charAt(0)}
+}
+function logout(){drop('zianDiscordUser');setUser(null);toast(t('loggedOut'))}
+
+/* رفع الأعمال */
+function openUpload(){if(!user){pendingUpload=true;openModal('loginModal');pendingUpload=true;toast(t('needLogin'));return}openModal('uploadModal')}
+function renderSpecs(){
+var box=document.getElementById('specs');box.innerHTML='';
+SPECS.forEach(function(s){
+var b=document.createElement('button');b.type='button';b.className='chip'+(chosenSpec===s?' on':'');
+b.setAttribute('role','radio');b.setAttribute('aria-checked',chosenSpec===s?'true':'false');
+b.textContent=t(s);b.onclick=function(){chosenSpec=s;renderSpecs()};box.appendChild(b);
+});
+}
+function fileKind(f){
+if(/^image\//.test(f.type))return 'image';
+if(/^video\//.test(f.type))return 'video';
+var n=(f.name||'').toLowerCase();
+if(/\.(jpe?g|png|gif|webp|heic|heif|bmp)$/.test(n))return 'image';
+if(/\.(mp4|mov|m4v|webm|3gp)$/.test(n))return 'video';
+return null;
+}
+function pickFile(inp){
+var f=inp.files&&inp.files[0];var err=document.getElementById('upErr');err.textContent='';
+var img=document.getElementById('prevImg'),vid=document.getElementById('prevVid'),fn=document.getElementById('fileName');
+img.classList.remove('on');vid.classList.remove('on');fn.classList.remove('on');chosenFile=null;
+if(!f)return;
+var kind=fileKind(f);
+if(!kind){err.textContent=t('errType');inp.value='';return}
+if(f.size>25*1024*1024){err.textContent=t('errBig');inp.value='';return}
+chosenFile=f;chosenFile._kind=kind;fn.textContent=f.name||'';
+var u=URL.createObjectURL(f);
+if(kind==='image'){img.src=u;img.classList.add('on')}else{vid.src=u;vid.classList.add('on')}
+setTimeout(function(){document.getElementById('specQ').scrollIntoView({behavior:'smooth',block:'center'})},200);
+}
+/* تصغير الصورة عشان تنحفظ بسهولة في كل الجوالات */
+function shrinkImage(f){
+return new Promise(function(res){
+var u=URL.createObjectURL(f);var im=new Image();
+im.onload=function(){
+try{
+var max=1600,w=im.naturalWidth,h=im.naturalHeight;
+if(!w||!h){URL.revokeObjectURL(u);res(f);return}
+var r=Math.min(1,max/Math.max(w,h));
+var c=document.createElement('canvas');c.width=Math.round(w*r);c.height=Math.round(h*r);
+c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+c.toBlob(function(b){URL.revokeObjectURL(u);res(b||f)},'image/jpeg',.86);
+}catch(e){URL.revokeObjectURL(u);res(f)}
+};
+im.onerror=function(){URL.revokeObjectURL(u);res(f)};
+im.src=u;
+});
+}
+function toBuffer(b){
+if(b.arrayBuffer)return b.arrayBuffer();
+return new Promise(function(res,rej){var r=new FileReader();r.onload=function(){res(r.result)};r.onerror=function(){rej(r.error)};r.readAsArrayBuffer(b)});
+}
+function resetUpload(){
+chosenFile=null;chosenSpec=null;
+document.getElementById('workFile').value='';document.getElementById('workTitle').value='';
+document.getElementById('prevImg').classList.remove('on');document.getElementById('prevVid').classList.remove('on');document.getElementById('fileName').classList.remove('on');
+document.getElementById('upErr').textContent='';renderSpecs();
+}
+
+/* قاعدة البيانات في الجهاز */
+var dbp=null;
+function db(){if(dbp)return dbp;dbp=new Promise(function(res,rej){if(!window.indexedDB){rej();return}var r=indexedDB.open('zianWorks',1);r.onupgradeneeded=function(){r.result.createObjectStore('works',{keyPath:'id',autoIncrement:true})};r.onsuccess=function(){res(r.result)};r.onerror=function(){rej(r.error)}});return dbp}
+function dbAll(){return db().then(function(d){return new Promise(function(res,rej){var q=d.transaction('works').objectStore('works').getAll();q.onsuccess=function(){res(q.result||[])};q.onerror=function(){rej(q.error)}})}).catch(function(){return[]})}
+function dbAdd(o){return db().then(function(d){return new Promise(function(res,rej){var tx=d.transaction('works','readwrite');tx.objectStore('works').add(o);tx.oncomplete=res;tx.onerror=function(){rej(tx.error)}})})}
+function dbDel(id){return db().then(function(d){return new Promise(function(res){var tx=d.transaction('works','readwrite');tx.objectStore('works').delete(id);tx.oncomplete=res})})}
+
+function publishWork(){
+var err=document.getElementById('upErr');err.textContent='';
+if(!chosenFile){err.textContent=t('errFile');return}
+if(!chosenSpec){err.textContent=t('errSpec');shake('specs');return}
+var btn=document.getElementById('publishBtn');btn.disabled=true;
+var title=document.getElementById('workTitle').value.trim().slice(0,60);
+var file=chosenFile,spec=chosenSpec,kind=file._kind||fileKind(file)||'image';
+var ready=kind==='image'?shrinkImage(file):Promise.resolve(file);
+var mime;
+ready.then(function(b){mime=b.type||(kind==='video'?'video/mp4':'image/jpeg');return toBuffer(b)})
+.then(function(buf){return dbAdd({user:user,spec:spec,title:title,type:kind,buf:buf,mime:mime,at:Date.now()})})
+.then(function(){
+sendHook('New work from @'+user+' | '+T.en[spec]+(title?' | '+title:''),file);
+closeModal('uploadModal');resetUpload();filter='all';renderFilters();renderGallery();
+toast(t('published'));
+setTimeout(function(){document.getElementById('community').scrollIntoView({behavior:'smooth'})},300);
+})
+.catch(function(){err.textContent=t('errSave')})
+.then(function(){btn.disabled=false});
+}
+
+/* المعرض */
+function renderFilters(){
+var box=document.getElementById('filters');box.innerHTML='';box.setAttribute('aria-label',t('navCommunity'));
+['all'].concat(SPECS).forEach(function(s){
+var b=document.createElement('button');b.type='button';b.className='chip'+(filter===s?' on':'');
+b.setAttribute('aria-pressed',filter===s?'true':'false');b.textContent=t(s);
+b.onclick=function(){filter=s;renderFilters();renderGallery()};box.appendChild(b);
+});
+}
+function renderGallery(){
+dbAll().then(function(list){
+var g=document.getElementById('gallery');
+urls.forEach(function(u){URL.revokeObjectURL(u)});urls=[];g.innerHTML='';
+list=list.filter(function(w){return filter==='all'||w.spec===filter}).sort(function(a,b){return b.at-a.at});
+if(!list.length){
+var e=document.createElement('div');e.className='empty gallery-empty';
+e.innerHTML='<div class="empty-icon" aria-hidden="true"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg></div>';
+var h=document.createElement('h3');h.textContent=t('galEmptyT');var p=document.createElement('p');p.textContent=t('galEmptyP');
+var b=document.createElement('button');b.type='button';b.className='btn btn-red';b.textContent=t('showWork');b.onclick=openUpload;
+e.appendChild(h);e.appendChild(p);e.appendChild(b);g.appendChild(e);return;
+}
+list.forEach(function(w){
+var c=document.createElement('article');c.className='work';
+var blob=w.blob||new Blob([w.buf],{type:w.mime||''});var u=URL.createObjectURL(blob);urls.push(u);
+var m;
+if(w.type==='video'){m=document.createElement('video');m.controls=true;m.playsInline=true;m.preload='metadata'}else{m=document.createElement('img');m.alt=w.title||t(w.spec);m.loading='lazy'}
+m.src=u;m.className='work-media';
+var body=document.createElement('div');body.className='work-body';
+var top=document.createElement('div');top.className='work-top';
+var sp=document.createElement('span');sp.className='spec';sp.textContent=t(w.spec);
+var del=document.createElement('button');del.type='button';del.className='del';del.textContent=t('del');
+del.onclick=function(){dbDel(w.id).then(function(){toast(t('deleted'));renderGallery()})};
+top.appendChild(sp);top.appendChild(del);body.appendChild(top);
+if(w.title){var ti=document.createElement('h3');ti.className='work-title';ti.textContent=w.title;body.appendChild(ti)}
+var us=document.createElement('span');us.className='work-user';us.textContent='@'+w.user;body.appendChild(us);
+c.appendChild(m);c.appendChild(body);g.appendChild(c);
+});
+});
+}
+
+/* مؤثرات */
 var bar=document.getElementById('progress');
 window.addEventListener('scroll',function(){var h=document.documentElement;var p=h.scrollTop/(h.scrollHeight-h.clientHeight||1);bar.style.width=(p*100)+'%'},{passive:true});
-
 document.querySelectorAll('.card').forEach(function(c){c.addEventListener('pointermove',function(e){var r=c.getBoundingClientRect();c.style.setProperty('--mx',(e.clientX-r.left)+'px');c.style.setProperty('--my',(e.clientY-r.top)+'px')})});
-
 var items=document.querySelectorAll('.reveal');
 if('IntersectionObserver' in window){
-var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('show');io.unobserve(e.target)}})},{threshold:.15});
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('show');io.unobserve(e.target)}})},{threshold:.12});
 items.forEach(function(el){io.observe(el)});
 }else{items.forEach(function(el){el.classList.add('show')})}
+
+/* البداية */
+lang=load('zianLang')||'ar';
+setUser(load('zianDiscordUser'));
+applyLang();
 </script>
 </body>
 </html>
