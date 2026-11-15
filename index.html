@@ -3,195 +3,320 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Zlan Studios</title>
+<title>Zian Studios</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 <style>
-body{margin:0;background:#0D1117}
-a{color:#A78BFA;text-decoration:none}a:hover{color:#C4B5FD}
-@keyframes zlOut{0%,82%{opacity:1;visibility:visible}100%{opacity:0;visibility:hidden}}
-@keyframes zlPop{0%{transform:scale(0) rotate(-135deg);opacity:0}70%{transform:scale(1.15) rotate(8deg);opacity:1}100%{transform:scale(1) rotate(0)}}
-@keyframes zlWord{0%{letter-spacing:0.9em;opacity:0;filter:blur(8px)}100%{letter-spacing:0.18em;opacity:1;filter:blur(0)}}
-@keyframes zlBar{0%{width:0}100%{width:240px}}
-@keyframes zlFade{0%{opacity:0}100%{opacity:1}}
-@keyframes zlGlow{0%,100%{box-shadow:0 0 0 0 rgba(167,139,250,0)}50%{box-shadow:0 0 60px 10px rgba(167,139,250,0.45)}}
-@keyframes zlUp{0%{opacity:0;transform:translateY(28px)}100%{opacity:1;transform:none}}
-.zl-intro{animation:zlOut 3.4s ease forwards}
-.zl-logo{animation:zlPop 0.9s cubic-bezier(.2,.9,.3,1.2) 0.2s both,zlGlow 1.6s ease 1.1s 1}
-.zl-word{animation:zlWord 1s ease 0.7s both}
-.zl-bar{animation:zlBar 1.1s ease 1.4s both}
-.zl-tag{animation:zlFade 0.6s ease 1.9s both}
-.zl-up{animation:zlUp 0.8s ease both}
-.zl-d1{animation-delay:3s}.zl-d2{animation-delay:3.15s}.zl-d3{animation-delay:3.3s}.zl-d4{animation-delay:3.45s}.zl-d5{animation-delay:3.3s}
-@media (prefers-reduced-motion: reduce){.zl-intro{display:none}.zl-up{animation:none}}
+:root{--red:#D92D2D;--red-2:#F26B6B;--red-soft:#FFE4E4;--red-bg:#FFF5F5;--ink:#1F1416;--muted:#6B5A5D;--line:#F2DADA}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:#fff;color:var(--ink);font-family:'IBM Plex Sans Arabic','Space Grotesk',sans-serif;overflow-x:hidden}
+a{color:var(--red);text-decoration:none}
+button{font-family:inherit}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+.latin{font-family:'Space Grotesk',sans-serif}
+
+/* افتتاحية */
+.intro{position:fixed;inset:0;z-index:100;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;animation:introOut 3.6s ease forwards;pointer-events:none}
+.intro-mark{width:96px;height:96px;border-radius:26px;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:54px;animation:pop .9s cubic-bezier(.2,.9,.3,1.25) .2s both,glow 1.6s ease 1.1s 1}
+.intro-word{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(30px,6vw,56px);color:var(--ink);white-space:nowrap;animation:word 1.1s ease .7s both}
+.intro-bar{height:4px;border-radius:4px;background:linear-gradient(90deg,var(--red-2),var(--red));animation:bar 1.1s ease 1.4s both}
+.intro-tag{color:var(--muted);font-size:17px;animation:fade .6s ease 2s both}
+@keyframes introOut{0%,84%{opacity:1;visibility:visible}100%{opacity:0;visibility:hidden}}
+@keyframes pop{0%{transform:scale(0) rotate(-140deg);opacity:0}70%{transform:scale(1.15) rotate(8deg);opacity:1}100%{transform:none}}
+@keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(217,45,45,0)}50%{box-shadow:0 0 70px 14px rgba(217,45,45,.35)}}
+@keyframes word{0%{letter-spacing:.9em;opacity:0;filter:blur(10px)}100%{letter-spacing:.16em;opacity:1;filter:none}}
+@keyframes bar{0%{width:0}100%{width:260px}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+
+/* شريط التنقل */
+.nav{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.8);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;gap:16px;height:76px}
+.brand{display:flex;align-items:center;gap:10px;color:var(--ink)}
+.mark{width:38px;height:38px;border-radius:11px;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:21px}
+.brand-name{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:19px;letter-spacing:.06em}
+.links{display:flex;align-items:center;gap:4px}
+.links a{color:var(--muted);padding:12px 14px;border-radius:10px;font-size:16px;font-weight:500;transition:color .2s,background .2s}
+.links a:hover{color:var(--red);background:var(--red-bg)}
+.nav-actions{display:flex;align-items:center;gap:10px}
+.menu-btn{display:none;width:46px;height:46px;border-radius:12px;border:1px solid var(--line);background:#fff;cursor:pointer;align-items:center;justify-content:center;color:var(--ink)}
+.mobile-menu{display:none;flex-direction:column;gap:4px;padding:8px 24px 20px;border-top:1px solid var(--line)}
+.mobile-menu a,.mobile-menu button{display:block;text-align:right;padding:14px 16px;border-radius:12px;font-size:17px;color:var(--ink);background:none;border:0;cursor:pointer}
+.mobile-menu a:hover,.mobile-menu button:hover{background:var(--red-bg);color:var(--red)}
+.mobile-menu.open{display:flex}
+
+/* الأزرار */
+.btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:14px 26px;border-radius:14px;font-weight:700;font-size:16px;cursor:pointer;border:1.5px solid transparent;transition:transform .25s,box-shadow .25s,background .25s,color .25s,border-color .25s;white-space:nowrap}
+.btn:hover{transform:translateY(-3px)}
+.btn:active{transform:translateY(0) scale(.98)}
+.btn-red{background:var(--red);color:#fff;box-shadow:0 10px 24px -10px rgba(217,45,45,.6)}
+.btn-red:hover{box-shadow:0 18px 34px -12px rgba(217,45,45,.7);color:#fff}
+.btn-red::after{content:"";position:absolute;top:0;bottom:0;width:60%;left:-80%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-20deg);animation:shine 3.5s ease-in-out 4s infinite}
+@keyframes shine{0%{left:-80%}35%,100%{left:130%}}
+.btn-line{background:#fff;color:var(--ink);border-color:var(--line)}
+.btn-line:hover{border-color:var(--red-2);color:var(--red)}
+.btn-soft{background:var(--red-soft);color:#A31F1F}
+.btn-soft:hover{background:#FFD3D3;color:#8C1A1A}
+.btn-sm{padding:11px 18px;font-size:15px;border-radius:12px}
+
+/* الواجهة */
+.hero{position:relative;overflow:hidden;padding:110px 0 120px}
+.blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:.55;pointer-events:none}
+.blob.b1{width:420px;height:420px;background:#FFD0D0;top:-120px;left:-120px;animation:float1 14s ease-in-out infinite}
+.blob.b2{width:340px;height:340px;background:#FFE6E6;bottom:-120px;right:-80px;animation:float2 16s ease-in-out infinite}
+@keyframes float1{50%{transform:translate(60px,40px) scale(1.08)}}
+@keyframes float2{50%{transform:translate(-50px,-30px) scale(1.1)}}
+.hero-in{position:relative;display:flex;flex-wrap:wrap;align-items:center;gap:60px}
+.hero-text{flex:1 1 440px;min-width:0;display:flex;flex-direction:column;gap:24px}
+.pill{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;background:var(--red-bg);border:1px solid var(--line);color:#A31F1F;padding:8px 16px;border-radius:999px;font-size:14px;font-weight:500}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--red);animation:pulse 1.8s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(217,45,45,.5)}50%{box-shadow:0 0 0 7px rgba(217,45,45,0)}}
+h1{margin:0;font-size:clamp(40px,6.4vw,76px);line-height:1.15;font-weight:700}
+.grad{background:linear-gradient(90deg,var(--red),var(--red-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{margin:0;font-size:19px;line-height:1.9;color:var(--muted);max-width:560px}
+.cta{display:flex;flex-wrap:wrap;gap:12px;padding-top:6px}
+.hero-art{flex:1 1 380px;min-width:0;display:flex;justify-content:center}
+.orbit{position:relative;width:min(380px,80vw);aspect-ratio:1}
+.ring{position:absolute;inset:0;border-radius:50%;border:1.5px dashed #F4BDBD;animation:spin 30s linear infinite}
+.ring.r2{inset:14%;border-style:solid;border-color:var(--line);animation-duration:22s;animation-direction:reverse}
+.ring.r3{inset:30%;border-color:#F8CACA;animation-duration:16s}
+.ring i{position:absolute;width:14px;height:14px;border-radius:50%;background:var(--red-2);top:-7px;left:calc(50% - 7px);box-shadow:0 0 0 6px #fff}
+.ring.r2 i{background:var(--red);width:12px;height:12px;top:-6px}
+.core{position:absolute;inset:38%;border-radius:28px;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(40px,8vw,64px);box-shadow:0 30px 60px -20px rgba(217,45,45,.55);animation:bob 4s ease-in-out infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes bob{50%{transform:translateY(-10px)}}
+
+/* الأقسام */
+section.block{padding:100px 0;border-top:1px solid var(--line)}
+section.tint{background:var(--red-bg)}
+.head{display:flex;flex-direction:column;gap:12px;margin-bottom:44px}
+.eyebrow{color:var(--red);font-weight:700;font-size:15px}
+h2{margin:0;font-size:clamp(32px,4.4vw,48px);line-height:1.25;font-weight:700}
+
+.empty{position:relative;overflow:hidden;background:#fff;border:1.5px dashed #F1B9B9;border-radius:28px;padding:clamp(48px,8vw,90px) 24px;display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center}
+.empty-icon{width:84px;height:84px;border-radius:24px;background:var(--red-soft);display:flex;align-items:center;justify-content:center;color:var(--red);animation:bob 3.5s ease-in-out infinite}
+.empty h3{margin:0;font-size:clamp(30px,5vw,44px);font-weight:700}
+.empty p{margin:0;color:var(--muted);font-size:17px;line-height:1.8;max-width:440px}
+.badge{display:inline-flex;align-items:center;gap:8px;background:#FFF0E0;color:#9A4A00;padding:8px 16px;border-radius:999px;font-size:15px;font-weight:700}
+.stripes{position:absolute;inset:auto 0 0 0;height:6px;background:repeating-linear-gradient(45deg,var(--red-2) 0 14px,#fff 14px 28px);opacity:.5;animation:slide 1.2s linear infinite;background-size:40px 40px}
+@keyframes slide{to{background-position:40px 0}}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px}
+.card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:32px;display:flex;flex-direction:column;gap:14px;transition:transform .35s,box-shadow .35s,border-color .35s}
+.card:hover{transform:translateY(-8px);box-shadow:0 26px 50px -24px rgba(217,45,45,.35);border-color:#F4BDBD}
+.card-icon{width:56px;height:56px;border-radius:16px;background:var(--red-soft);color:var(--red);display:flex;align-items:center;justify-content:center;transition:transform .35s}
+.card:hover .card-icon{transform:rotate(-8deg) scale(1.08)}
+.card h3{margin:0;font-size:22px;font-weight:700}
+.card p{margin:0;font-size:16px;line-height:1.85;color:var(--muted)}
+
+.join{position:relative;overflow:hidden;background:var(--red);color:#fff;border-radius:32px;padding:clamp(36px,6vw,76px);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:32px}
+.join::before,.join::after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.1)}
+.join::before{width:320px;height:320px;top:-140px;left:-80px;animation:float1 12s ease-in-out infinite}
+.join::after{width:220px;height:220px;bottom:-110px;right:20%;animation:float2 14s ease-in-out infinite}
+.join-text{position:relative;flex:1 1 400px;min-width:0;display:flex;flex-direction:column;gap:12px}
+.join-text p{margin:0;font-size:18px;line-height:1.8;color:#FFE9E9}
+.join-btns{position:relative;display:flex;flex-wrap:wrap;gap:12px}
+.btn-white{background:#fff;color:var(--red)}
+.btn-white:hover{color:#A31F1F;box-shadow:0 18px 34px -14px rgba(0,0,0,.35)}
+.btn-ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.6)}
+.btn-ghost:hover{background:rgba(255,255,255,.12);color:#fff}
+
+footer{border-top:1px solid var(--line);padding:30px 0}
+.foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;color:var(--muted);font-size:14px}
+
+/* النافذة */
+.modal{position:fixed;inset:0;z-index:60;background:rgba(31,20,22,.45);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
+.modal.open{opacity:1;visibility:visible}
+.modal-box{background:#fff;border-radius:28px;padding:42px 30px 30px;max-width:430px;width:100%;display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center;box-shadow:0 40px 80px -30px rgba(0,0,0,.4);transform:translateY(30px) scale(.94);transition:transform .4s cubic-bezier(.2,.9,.3,1.2)}
+.modal.open .modal-box{transform:none}
+.modal-icon{width:78px;height:78px;border-radius:24px;background:var(--red-soft);color:var(--red);display:flex;align-items:center;justify-content:center}
+.modal-box h2{font-size:28px}
+.modal-box p{margin:0;font-size:17px;line-height:1.8;color:var(--muted)}
+.modal-btns{display:flex;flex-direction:column;gap:10px;width:100%;margin-top:8px}
+.modal-btns .btn{width:100%}
+
+/* ظهور عند النزول */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.8,.2,1)}
+.reveal.show{opacity:1;transform:none}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
+.hero .up{animation:up .9s ease both}
+.hero .up:nth-child(1){animation-delay:3.1s}.hero .up:nth-child(2){animation-delay:3.25s}.hero .up:nth-child(3){animation-delay:3.4s}.hero .up:nth-child(4){animation-delay:3.55s}
+.hero-art.up{animation:up 1s ease 3.3s both}
+@keyframes up{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+
+@media (max-width:900px){.links,.nav-actions .hide-sm{display:none}.menu-btn{display:inline-flex}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.intro{display:none}.reveal{opacity:1;transform:none}}
 </style>
-<style>#devModal[hidden]{display:none!important}html{scroll-behavior:smooth}</style>
 </head>
 <body>
-<div dir="rtl" style="background: #0D1117; color: #E6EDF3; font-family: 'IBM Plex Sans Arabic', 'Space Grotesk', sans-serif; min-height: 100vh">
 
-<div class="zl-intro" aria-hidden="true" style="position: fixed; inset: 0; z-index: 50; background: #0A0D12; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; pointer-events: none">
-<span class="zl-logo" style="width: 84px; height: 84px; background: #A78BFA; display: block; border-radius: 18px"></span>
-<span class="zl-word" dir="ltr" style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(30px, 5vw, 52px); color: #F3F0FF; white-space: nowrap">ZLAN STUDIOS</span>
-<span class="zl-bar" style="height: 3px; background: #A78BFA; display: block; border-radius: 3px"></span>
-<span class="zl-tag" style="color: #B8B2CC; font-size: 17px">مرحباً فيك في عالمنا</span>
+<div class="intro" aria-hidden="true">
+<div class="intro-mark">Z</div>
+<div class="intro-word" dir="ltr">ZIAN STUDIOS</div>
+<div class="intro-bar"></div>
+<div class="intro-tag">مرحباً فيك في عالمنا</div>
 </div>
 
-<header style="border-bottom: 1px solid #222A35">
-<nav aria-label="القائمة الرئيسية" style="max-width: 1200px; margin: 0 auto; padding: 18px 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
-<a href="#top" style="display: flex; align-items: center; gap: 10px; color: #E6EDF3">
-<span aria-hidden="true" style="width: 28px; height: 28px; background: #A78BFA; display: block; border-radius: 6px"></span>
-<span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 20px; letter-spacing: 0.04em" dir="ltr">ZLAN STUDIOS</span>
+<header class="nav">
+<div class="wrap nav-in">
+<a href="#top" class="brand" aria-label="Zian Studios">
+<span class="mark" aria-hidden="true">Z</span>
+<span class="brand-name" dir="ltr">ZIAN STUDIOS</span>
 </a>
-<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px">
-<a href="#maps" style="color: #C9D3DD; padding: 12px 14px; font-size: 16px">الماب</a>
-<a href="#work" style="color: #C9D3DD; padding: 12px 14px; font-size: 16px">وش نسوي</a>
-<button type="button" onclick="openDev()" style="font-family: inherit; cursor: pointer; background: transparent; color: #E6EDF3; border: 1px solid #2E3846; padding: 11px 18px; border-radius: 10px; font-weight: 500; font-size: 16px">تبي مطورين؟</button>
-<a href="https://discord.gg/pTAV7vbmj" target="_blank" rel="noopener" style="color: #E6EDF3; border: 1px solid #A78BFA; padding: 11px 18px; border-radius: 10px; font-weight: 500; font-size: 16px">ديسكورد</a>
-<a href="https://www.roblox.com/share/g/352262036" target="_blank" rel="noopener" style="color: #0D1117; background: #A78BFA; padding: 12px 20px; border-radius: 10px; font-weight: 700; font-size: 16px">انضم للقروب</a>
-</div>
+<nav class="links" aria-label="القائمة الرئيسية">
+<a href="#top">الرئيسية</a>
+<a href="#maps">ماباتنا</a>
+<a href="#work">وش نسوي</a>
+<a href="#join">تواصل معنا</a>
 </nav>
+<div class="nav-actions">
+<button type="button" class="btn btn-line btn-sm hide-sm" onclick="openDev()">تبي مطورين؟</button>
+<a href="https://www.roblox.com/share/g/352262036" target="_blank" rel="noopener" class="btn btn-red btn-sm hide-sm">انضم للقروب</a>
+<button type="button" class="menu-btn" aria-label="فتح القائمة" aria-expanded="false" onclick="toggleMenu(this)">
+<svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"></line><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="17" x2="20" y2="17"></line></svg>
+</button>
+</div>
+</div>
+<div class="mobile-menu" id="mobileMenu">
+<a href="#top" onclick="closeMenu()">الرئيسية</a>
+<a href="#maps" onclick="closeMenu()">ماباتنا</a>
+<a href="#work" onclick="closeMenu()">وش نسوي</a>
+<a href="#join" onclick="closeMenu()">تواصل معنا</a>
+<button type="button" onclick="closeMenu();openDev()">تبي مطورين؟</button>
+<a href="https://www.roblox.com/share/g/352262036" target="_blank" rel="noopener" class="btn btn-red" style="color:#fff;text-align:center;margin-top:8px">انضم للقروب</a>
+</div>
 </header>
 
-<section id="top" style="max-width: 1200px; margin: 0 auto; padding: 96px 24px 80px; display: flex; flex-wrap: wrap; align-items: center; gap: 56px">
-<div style="flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 24px">
-<span class="zl-up zl-d1" style="align-self: flex-start; border: 1px solid #2E3846; color: #A78BFA; padding: 6px 14px; border-radius: 999px; font-size: 14px; font-weight: 500">مجتمع مطوّرين على روبلوكس</span>
-<h1 class="zl-up zl-d2" style="margin: 0; font-size: clamp(40px, 6vw, 72px); line-height: 1.15; font-weight: 700">نبني عوالم روبلوكس تستاهل تنلعب</h1>
-<p class="zl-up zl-d3" style="margin: 0; font-size: 19px; line-height: 1.8; color: #9BA7B4; max-width: 560px">Zlan Studios مجتمعنا اللي ننشر فيه ماباتنا. نصمم الواجهات، نكتب السكربتات، ونبني كل ماب من الصفر في Roblox Studio.</p>
-<div class="zl-up zl-d4" style="display: flex; flex-wrap: wrap; gap: 12px; padding-top: 8px">
-<a href="https://www.roblox.com/share/g/352262036" target="_blank" rel="noopener" style="color: #0D1117; background: #A78BFA; padding: 14px 26px; border-radius: 12px; font-weight: 700; font-size: 17px">انضم للقروب</a>
-<a href="https://discord.gg/pTAV7vbmj" target="_blank" rel="noopener" style="display: flex; align-items: center; gap: 10px; color: #E6EDF3; border: 1px solid #A78BFA; padding: 14px 26px; border-radius: 12px; font-weight: 500; font-size: 17px">
+<main>
+<section class="hero" id="top">
+<span class="blob b1" aria-hidden="true"></span>
+<span class="blob b2" aria-hidden="true"></span>
+<div class="wrap hero-in">
+<div class="hero-text">
+<span class="pill up"><span class="dot" aria-hidden="true"></span>مجتمع مطوّرين على روبلوكس</span>
+<h1 class="up">نبني عوالم روبلوكس <span class="grad">تستاهل تنلعب</span></h1>
+<p class="lead up">Zian Studios مجتمعنا اللي ننشر فيه ماباتنا. نصمم الواجهات، نكتب السكربتات، ونبني كل ماب من الصفر في Roblox Studio.</p>
+<div class="cta up">
+<a href="https://www.roblox.com/share/g/352262036" target="_blank" rel="noopener" class="btn btn-red">انضم للقروب</a>
+<a href="https://discord.gg/pTAV7vbmj" target="_blank" rel="noopener" class="btn btn-line">
 <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
 ادخل الديسكورد
 </a>
-<button type="button" onclick="openDev()" style="font-family: inherit; cursor: pointer; display: flex; align-items: center; gap: 10px; background: transparent; color: #E6EDF3; border: 1px solid #2E3846; padding: 14px 26px; border-radius: 12px; font-weight: 500; font-size: 17px">
+<button type="button" class="btn btn-soft" onclick="openDev()">
 <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
 تبي مطورين؟
 </button>
 </div>
 </div>
-<div class="zl-up zl-d5" style="flex: 1 1 420px; min-width: 0">
-<div dir="ltr" style="background: #121821; border: 1px solid #222A35; border-radius: 18px; overflow: hidden">
-<div style="display: flex; align-items: center; gap: 8px; padding: 14px 18px; border-bottom: 1px solid #222A35">
-<span aria-hidden="true" style="width: 11px; height: 11px; border-radius: 50%; background: #3A4553; display: block"></span>
-<span aria-hidden="true" style="width: 11px; height: 11px; border-radius: 50%; background: #3A4553; display: block"></span>
-<span aria-hidden="true" style="width: 11px; height: 11px; border-radius: 50%; background: #3A4553; display: block"></span>
-<span style="margin-left: 10px; font-family: 'Space Grotesk', monospace; font-size: 13px; color: #8B97A5">bank_system.exe</span>
-</div>
-<div style="padding: 28px; font-family: 'Space Grotesk', monospace; font-size: 15px; line-height: 2; color: #9BA7B4">
-<div>&gt; connecting to <span style="color: #E6EDF3">CITY_BANK</span>...</div>
-<div>&gt; bypassing firewall <span style="color: #A78BFA">[████████░░] 80%</span></div>
-<div>&gt; vault status: <span style="color: #FFB454">LOCKED</span></div>
-<div>&gt; <span style="color: #A78BFA">access granted_</span></div>
-<div style="margin-top: 20px; height: 180px; border: 1px dashed #2E3846; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #8B97A5; font-family: 'IBM Plex Sans Arabic', sans-serif" dir="rtl">[ صورة من الماب ]</div>
+<div class="hero-art up" aria-hidden="true">
+<div class="orbit">
+<div class="ring"><i></i></div>
+<div class="ring r2"><i></i></div>
+<div class="ring r3"></div>
+<div class="core">Z</div>
 </div>
 </div>
 </div>
 </section>
 
-<section id="maps" style="border-top: 1px solid #222A35">
-<div style="max-width: 1200px; margin: 0 auto; padding: 88px 24px; display: flex; flex-direction: column; gap: 40px">
-<div style="display: flex; flex-direction: column; gap: 12px">
-<span style="color: #A78BFA; font-size: 15px; font-weight: 500">الماب</span>
-<h2 style="margin: 0; font-size: clamp(32px, 4vw, 44px); font-weight: 700">ماباتنا</h2>
+<section class="block tint" id="maps">
+<div class="wrap">
+<div class="head reveal">
+<span class="eyebrow">ماباتنا</span>
+<h2>آخر أعمالنا</h2>
 </div>
-<div style="display: flex; flex-wrap: wrap; gap: 24px">
-
-<article style="flex: 2 1 480px; min-width: 0; background: #121821; border: 1px solid #222A35; border-radius: 18px; padding: 32px; display: flex; flex-direction: column; gap: 18px">
-<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
-<h3 style="margin: 0; font-size: 28px; font-weight: 700">ماب الاختراق</h3>
-<span style="background: #2A2416; color: #FFB454; padding: 6px 12px; border-radius: 999px; font-size: 14px; font-weight: 500">قيد التطوير</span>
+<div class="empty reveal d1">
+<div class="empty-icon" aria-hidden="true">
+<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
 </div>
-<p style="margin: 0; font-size: 17px; line-height: 1.8; color: #9BA7B4">ادخل البنك، اخترق الأنظمة، وافتح الخزنة قبل لا ينكشف أمرك. اختراق وهمي داخل اللعبة، بواجهات وأنظمة مصممة خصيصاً للماب.</p>
-<div style="height: 220px; border: 1px dashed #2E3846; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #8B97A5">[ صورة أو فيديو من الماب ]</div>
-<a href="https://www.roblox.com" style="align-self: flex-start; display: flex; align-items: center; gap: 10px; color: #0D1117; background: #A78BFA; padding: 13px 22px; border-radius: 12px; font-weight: 700; font-size: 16px">
-<svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>
-العب على روبلوكس
-</a>
-</article>
-
-<article style="flex: 1 1 280px; min-width: 0; border: 1px dashed #2E3846; border-radius: 18px; padding: 32px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 14px; text-align: center">
-<svg aria-hidden="true" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#8B97A5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-<h3 style="margin: 0; font-size: 22px; font-weight: 700">ماب جديد</h3>
-<p style="margin: 0; font-size: 16px; line-height: 1.7; color: #9BA7B4">قريب… تابع المجتمع عشان توصلك أول ما ينزل.</p>
-</article>
-
+<h3>لا يوجد</h3>
+<span class="badge">
+<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+قيد التطوير
+</span>
+<p>نشتغل الحين على ماباتنا الجاية. تابعنا في الديسكورد عشان توصلك أول ما تنزل.</p>
+<span class="stripes" aria-hidden="true"></span>
 </div>
 </div>
 </section>
 
-<section id="work" style="border-top: 1px solid #222A35">
-<div style="max-width: 1200px; margin: 0 auto; padding: 88px 24px; display: flex; flex-direction: column; gap: 40px">
-<div style="display: flex; flex-direction: column; gap: 12px">
-<span style="color: #A78BFA; font-size: 15px; font-weight: 500">وش نسوي</span>
-<h2 style="margin: 0; font-size: clamp(32px, 4vw, 44px); font-weight: 700">كل ماب نسويه من الصفر</h2>
+<section class="block" id="work">
+<div class="wrap">
+<div class="head reveal">
+<span class="eyebrow">وش نسوي</span>
+<h2>كل ماب نسويه من الصفر</h2>
 </div>
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px">
-
-<div style="background: #121821; border: 1px solid #222A35; border-radius: 18px; padding: 28px; display: flex; flex-direction: column; gap: 14px">
-<svg aria-hidden="true" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M3 9h18"></path><path d="M9 21V9"></path></svg>
-<h3 style="margin: 0; font-size: 21px; font-weight: 700">تصميم الواجهات</h3>
-<p style="margin: 0; font-size: 16px; line-height: 1.8; color: #9BA7B4">واجهات GUI واضحة وسهلة: القوائم، الحقيبة، الترقيات، وكل شاشة يشوفها اللاعب.</p>
+<div class="cards">
+<div class="card reveal d1">
+<span class="card-icon" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M3 9h18"></path><path d="M9 21V9"></path></svg></span>
+<h3>تصميم الواجهات</h3>
+<p>واجهات GUI فخمة وسهلة: القوائم، الحقيبة، الترقيات، وكل شاشة يشوفها اللاعب.</p>
 </div>
-
-<div style="background: #121821; border: 1px solid #222A35; border-radius: 18px; padding: 28px; display: flex; flex-direction: column; gap: 14px">
-<svg aria-hidden="true" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-<h3 style="margin: 0; font-size: 21px; font-weight: 700">البرمجة والسكربتات</h3>
-<p style="margin: 0; font-size: 16px; line-height: 1.8; color: #9BA7B4">أنظمة اللعب مكتوبة بـ Luau: من الأزرار والانتقالات إلى أنظمة الاختراق داخل الماب.</p>
+<div class="card reveal d2">
+<span class="card-icon" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg></span>
+<h3>البرمجة والسكربتات</h3>
+<p>أنظمة اللعب مكتوبة بـ Luau: من الأزرار والانتقالات إلى أنظمة اللعب الكاملة.</p>
 </div>
-
-<div style="background: #121821; border: 1px solid #222A35; border-radius: 18px; padding: 28px; display: flex; flex-direction: column; gap: 14px">
-<svg aria-hidden="true" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
-<h3 style="margin: 0; font-size: 21px; font-weight: 700">بناء الماب</h3>
-<p style="margin: 0; font-size: 16px; line-height: 1.8; color: #9BA7B4">نبني العالم نفسه في Roblox Studio: المباني، التفاصيل، والأماكن اللي يستكشفها اللاعب.</p>
-</div>
-
-</div>
-</div>
-</section>
-
-<section id="join" style="border-top: 1px solid #222A35">
-<div style="max-width: 1200px; margin: 0 auto; padding: 88px 24px">
-<div style="background: #121821; border: 1px solid #222A35; border-radius: 24px; padding: clamp(32px, 6vw, 72px); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 32px">
-<div style="flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 14px">
-<h2 style="margin: 0; font-size: clamp(30px, 4vw, 44px); font-weight: 700; line-height: 1.3">انضم لـ Zlan Studios</h2>
-<p style="margin: 0; font-size: 18px; line-height: 1.8; color: #9BA7B4">انضم لقروبنا في روبلوكس عشان تلعب ماباتنا أول ما تنزل، وادخل الديسكورد وسولف معنا وتابع كل جديد.</p>
-</div>
-<div style="display: flex; flex-wrap: wrap; gap: 14px">
-<a href="https://www.roblox.com/share/g/352262036" target="_blank" rel="noopener" style="display: flex; align-items: center; gap: 10px; color: #0D1117; background: #A78BFA; padding: 16px 30px; border-radius: 14px; font-weight: 700; font-size: 18px">
-انضم للقروب
-<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-</a>
-<a href="https://discord.gg/pTAV7vbmj" target="_blank" rel="noopener" style="display: flex; align-items: center; gap: 10px; color: #E6EDF3; border: 1px solid #A78BFA; padding: 16px 30px; border-radius: 14px; font-weight: 500; font-size: 18px">
-<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-ادخل الديسكورد
-</a>
+<div class="card reveal d3">
+<span class="card-icon" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg></span>
+<h3>بناء الماب</h3>
+<p>نبني العالم نفسه في Roblox Studio: المباني، التفاصيل، والأماكن اللي يستكشفها اللاعب.</p>
 </div>
 </div>
 </div>
 </section>
 
-<footer style="border-top: 1px solid #222A35">
-<div style="max-width: 1200px; margin: 0 auto; padding: 28px 24px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; color: #8B97A5; font-size: 14px">
-<span dir="ltr" style="font-family: 'Space Grotesk', sans-serif">© 2026 Zlan Studios</span>
+<section class="block" id="join" style="border-top:0;padding-top:0">
+<div class="wrap">
+<div class="join reveal">
+<div class="join-text">
+<h2>انضم لـ Zian Studios</h2>
+<p>انضم لقروبنا في روبلوكس عشان تلعب ماباتنا أول ما تنزل، وادخل الديسكورد وسولف معنا.</p>
+</div>
+<div class="join-btns">
+<a href="https://www.roblox.com/share/g/352262036" target="_blank" rel="noopener" class="btn btn-white">انضم للقروب</a>
+<a href="https://discord.gg/pTAV7vbmj" target="_blank" rel="noopener" class="btn btn-ghost">ادخل الديسكورد</a>
+</div>
+</div>
+</div>
+</section>
+</main>
+
+<footer>
+<div class="wrap foot">
+<span class="latin" dir="ltr">© 2026 Zian Studios</span>
 <span>صُنع بحب في Roblox Studio</span>
 </div>
 </footer>
 
-<div id="devModal" hidden style="position: fixed; inset: 0; z-index: 40; background: rgba(5,7,10,0.75); display: flex; align-items: center; justify-content: center; padding: 24px">
-<div role="dialog" aria-modal="true" aria-labelledby="dev-title" class="zl-up" style="background: #121821; border: 1px solid #A78BFA; border-radius: 22px; padding: 40px 32px 32px; max-width: 420px; width: 100%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center">
-<svg aria-hidden="true" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.910a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
-<h2 id="dev-title" style="margin: 0; font-size: 28px; font-weight: 700">قيد التطوير</h2>
-<p style="margin: 0; font-size: 17px; line-height: 1.8; color: #9BA7B4">خدمة طلب المطورين جاية قريب. تابعنا في الديسكورد عشان تعرف أول ما تفتح.</p>
-<button type="button" onclick="closeDev()" style="font-family: inherit; cursor: pointer; margin-top: 8px; background: #A78BFA; color: #0D1117; border: 0; padding: 13px 34px; border-radius: 12px; font-weight: 700; font-size: 17px">تمام</button>
+<div class="modal" id="devModal" onclick="if(event.target===this)closeDev()">
+<div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="devTitle">
+<div class="modal-icon" aria-hidden="true">
+<svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><line x1="17" y1="8" x2="22" y2="13"></line><line x1="22" y1="8" x2="17" y2="13"></line></svg>
+</div>
+<h2 id="devTitle">مافي مطورين حالياً</h2>
+<p>ما عندنا مطورين متاحين الحين. انضم لديسكوردنا عشان توصلك أخبار المطورين أول بأول.</p>
+<div class="modal-btns">
+<a href="https://discord.gg/pTAV7vbmj" target="_blank" rel="noopener" class="btn btn-red">
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+انضم للديسكورد لأخبار المطورين
+</a>
+<button type="button" class="btn btn-line" onclick="closeDev()">إغلاق</button>
+</div>
 </div>
 </div>
 
-</div>
 <script>
-function openDev(){document.getElementById('devModal').hidden=false}
-function closeDev(){document.getElementById('devModal').hidden=true}
-document.getElementById('devModal').addEventListener('click',function(e){if(e.target===this)closeDev()});
+function openDev(){document.getElementById('devModal').classList.add('open')}
+function closeDev(){document.getElementById('devModal').classList.remove('open')}
+function toggleMenu(b){var m=document.getElementById('mobileMenu');var o=m.classList.toggle('open');b.setAttribute('aria-expanded',o)}
+function closeMenu(){document.getElementById('mobileMenu').classList.remove('open');var b=document.querySelector('.menu-btn');if(b)b.setAttribute('aria-expanded','false')}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeDev()});
+var items=document.querySelectorAll('.reveal');
+if('IntersectionObserver' in window){
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('show');io.unobserve(e.target)}})},{threshold:.15});
+items.forEach(function(el){io.observe(el)});
+}else{items.forEach(function(el){el.classList.add('show')})}
 </script>
 </body>
 </html>
